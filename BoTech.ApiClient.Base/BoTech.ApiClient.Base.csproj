@@ -4,11 +4,27 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>1.0.1-alpha</Version>
+        <Title>BoTech.ApiClient.Base</Title>
+        <Authors>www.botech.dev</Authors>
+        <Description>Some base classes to help developers build api clients.</Description>
+        <Copyright>© 2026 www.botech.dev All Rights Reserved!</Copyright>
+        <PackageProjectUrl>www.botech.dev</PackageProjectUrl>
+        <PackageIcon>BoTechLogoSmall.drawio.png</PackageIcon>
+        <RepositoryUrl>https://github.com/BoTech-Development/BoTech.ApiClient.Base</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="BoTech.HttpClientHelper" Version="1.0.2-Alpha" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="BoTechLogoSmall.drawio.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
     </ItemGroup>
 
 </Project>
