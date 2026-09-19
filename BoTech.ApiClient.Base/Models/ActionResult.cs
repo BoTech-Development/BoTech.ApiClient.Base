@@ -4,7 +4,10 @@ using BoTech.ApiClient.Base.Services;
 using BoTech.HttpClientHelper;
 
 namespace BoTech.ApiClient.Base.Models;
-
+/// <summary>
+/// Result of each Api client endpoint.
+/// </summary>
+/// <typeparam name="T">Type of parsed data</typeparam>
 public class ActionResult<T>
 {
     public bool IsSuccess { get; init; }
@@ -16,6 +19,11 @@ public class ActionResult<T>
     /// </summary>
     public T? ParsedData { get; init; }
     
+    private ActionResult()
+    {
+        
+    }
+
     public static ActionResult<T> FromRequestResult(string endpoint, RequestResult<T> requestResult, HttpResultToUserMessageConverter converter)
     {
         if (requestResult.Error != null)

@@ -16,12 +16,18 @@ public class UserMessageForHttpResult
     /// <summary>
     /// The expected status code which will be returned
     /// </summary>
-    public HttpStatusCode ExpectedStatusCode { get; init; } 
+    public HttpStatusCode ExpectedStatusCode { get; init; }
+
     /// <summary>
     /// The string that should be returned by the endpoint.
+    /// Is null empty when not necessary to check. <see cref="ShouldCheckReturnedString"/>
     /// </summary>
-    public string ExpectedReturnedString { get; init; }
-  
+    public string ExpectedReturnedString { get; init; } = "";
+    /// <summary>
+    /// Is true when <see cref="ExpectedReturnedString"/> is not empty and the server result should at least contain the string.
+    /// </summary>
+    public bool ShouldCheckReturnedString { get; set; } = false;
+
     public UserMessageForHttpResult(Dictionary<CultureInfo, string> message, HttpStatusCode statusCode, string returnedString)
     {
         UserMessage = message;
@@ -29,7 +35,12 @@ public class UserMessageForHttpResult
         ExpectedReturnedString = returnedString;
         
     }
-
+    /// <summary>
+    /// This method can be used to find the correct user message for a specific result coming from the server.
+    /// </summary>
+    /// <typeparam name="T">Generic type of returned model. Not necessary for this method.</typeparam>
+    /// <param name="requestResult"> The server result.</param>
+    /// <returns>true when this (natural language) message can be assigned to the server result else false</returns>
     public bool Match<T>(RequestResult<T> requestResult)
     {
         if (requestResult.ResponseMessage != null)

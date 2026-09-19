@@ -11,9 +11,21 @@
         <Description>Some base classes to help developers build api clients.</Description>
         <Copyright>© 2026 www.botech.dev All Rights Reserved!</Copyright>
         <PackageProjectUrl>www.botech.dev</PackageProjectUrl>
-        <PackageIcon>BoTechLogoSmall.drawio.png</PackageIcon>
+        <PackageIcon>BoTechLogoSmall.png</PackageIcon>
         <RepositoryUrl>https://github.com/BoTech-Development/BoTech.ApiClient.Base</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\BoTechLogoSmall.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="BoTech.HttpClientHelper" Version="1.0.2-Alpha" />
