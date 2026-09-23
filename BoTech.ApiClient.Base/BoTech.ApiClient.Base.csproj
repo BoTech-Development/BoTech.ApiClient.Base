@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.0.1-alpha</Version>
+        <Version>1.0.4-alpha</Version>
         <Title>BoTech.ApiClient.Base</Title>
         <Authors>www.botech.dev</Authors>
         <Description>Some base classes to help developers build api clients.</Description>

@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels"
+             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.MenuView"
+             x:DataType="vm:MenuViewModel">
+    <Grid ColumnDefinitions="*, *"
+          Margin="8,8,8,5">
+        <Border Grid.Column="0" 
+                CornerRadius="{DynamicResource LgCornerRadius}"
+                HorizontalAlignment="Left"
+                Padding="4"
+                BorderThickness="2"
+                BorderBrush="#FFCECECE">
+            <Menu >
+                <MenuItem Header="File">
+                    <MenuItem Header="New Project"/>
+                    <MenuItem Header="Open Project"/>
+                    <MenuItem Header="Close"/>
+                </MenuItem>
+                <MenuItem Header="Help">
+                    <MenuItem Header="Open GitHub Page"/>
+                    <MenuItem Header="Check for updates."/>
+                    <MenuItem Header="About" Command="{Binding ShowAboutDialogCommand}"/>
+                </MenuItem>
+            </Menu>
+        </Border>
+        <Grid Grid.Column="1"
+              IsVisible="{Binding IsUpdateAvailable}">
+    
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Classes="Outline"
+                    Command="{Binding ExecuteUpdateCommand}">
+                <shadUi:ButtonAssist.Icon>
+                    <avalonia:MaterialIcon Kind="DownloadBoxOutline"/>
+                </shadUi:ButtonAssist.Icon>
+                Update available!
+            </Button>
+
+            <shadUi:Badge
+                Content="{Binding LatestVersion}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,-6,-6,-10"
+                Classes="Destructive" />
+
+        </Grid>
+
+    </Grid>
+</UserControl>
