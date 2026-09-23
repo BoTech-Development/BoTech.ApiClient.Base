@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Dialogs"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.Dialogs.CreateNewProjectDialogView"
+             x:DataType="vm:CreateNewProjectDialogViewModel">
+  <StackPanel Margin="15">
+      <StackPanel Orientation="Horizontal">
+          <icons:MaterialIcon Kind="PlusNetworkOutline" IconSize="32"/>
+          <TextBlock Text="Create a new Project." FontWeight="Bold" FontSize="26"/>
+      </StackPanel>
+
+
+      <TextBox Classes="Clearable"
+               UseFloatingPlaceholder="True"
+               PlaceholderText="NewApiClientProject"
+               shadui:ControlAssist.Label="Project Name:"
+               Margin="0,10,0,0"
+               Text="{Binding ProjectName}"/>
+      <TextBox Classes="Clearable"
+               UseFloatingPlaceholder="True"
+               PlaceholderText="Path to any folder"
+               shadui:ControlAssist.Label="Project output path:"
+               Text="{Binding ProjectLocation}">
+          <TextBox.InnerRightContent>
+              <Button Classes="Secondary"
+                      Command="{Binding OpenProjectLocationFileSelectorCommand}">
+                  <shadui:ButtonAssist.Icon>
+                      <icons:MaterialIcon Kind="Folder"/>
+                  </shadui:ButtonAssist.Icon>
+              </Button>
+          </TextBox.InnerRightContent>
+      </TextBox>
+      <TextBox Classes="Clearable"
+               UseFloatingPlaceholder="True"
+               PlaceholderText="Path to e.g. swagger.json"
+               shadui:ControlAssist.Label="Open Api .json File:"
+               Text="{Binding OpenApiDefinitionJsonFilePath}">
+          <TextBox.InnerRightContent>
+              <Button Classes="Secondary"
+                      Command="{Binding OpenOpenApiFileSelectorCommand}">
+                  <shadui:ButtonAssist.Icon>
+                      <icons:MaterialIcon Kind="FileCode"/>
+                  </shadui:ButtonAssist.Icon>
+              </Button>
+          </TextBox.InnerRightContent>
+      </TextBox>
+      <TextBlock Text="Optional" 
+                 FontSize="19" 
+                 FontWeight="SemiBold"
+                 Margin="0,10,0,0"/>
+      <TextBox Classes="Clearable"
+               UseFloatingPlaceholder="True"
+               PlaceholderText="Path to dto .csproj"
+               shadui:ControlAssist.Label="Shared models project-file:"
+               Text="{Binding SharedModelProjectFile}">
+          <TextBox.InnerRightContent>
+              <Button Classes="Secondary"
+                      Command="{Binding OpenSharedModelsProjectFileSelectorCommand}">
+                  <shadui:ButtonAssist.Icon>
+                      <icons:MaterialIcon Kind="FileCode"/>
+                  </shadui:ButtonAssist.Icon>
+              </Button>
+          </TextBox.InnerRightContent>
+      </TextBox>
+      <Button Classes="Primary" 
+              Margin="0,10,0,0"
+              Command="{Binding CreateProjectCommand}">
+          Create
+      </Button>
+  </StackPanel>
+</UserControl>

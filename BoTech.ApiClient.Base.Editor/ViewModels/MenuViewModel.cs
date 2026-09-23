@@ -1,10 +1,8 @@
-﻿using Avalonia.Controls;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Primitives;
 using ShadUI;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
 using BoTech.ApiClient.Base.Editor.Services;
 using BoTech.ApiClient.Base.Editor.ViewModels.Dialogs;
@@ -25,7 +23,20 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// Updates this application to a new version.
         /// </summary>
         public ReactiveCommand<RxVoid, RxVoid> ExecuteUpdateCommand { get; set; }
+        /// <summary>
+        /// Shows the About dialog 
+        /// </summary>
         public ReactiveCommand<RxVoid, RxVoid> ShowAboutDialogCommand { get; set; }
+        /// <summary>
+        /// Starts the <see cref="ApplicationUpdateService.GetInstance().CheckForUpdates()"/> method
+        /// </summary>
+        public ReactiveCommand<RxVoid, RxVoid> CheckForUpdatesCommand { get; set; }
+        /// <summary>
+        /// opens the GitHub page in the web browser
+        /// </summary>
+        public ReactiveCommand<RxVoid, RxVoid> ShowGithubPageCommand { get; set; }
+
+        public ReactiveCommand<RxVoid, RxVoid> OpenCreateNewProjectCommand { get; set; }
 
         public MenuViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
         {
@@ -42,9 +53,35 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
                     .Dismissible()
                     .Show();
             };
+            CheckForUpdatesCommand = ReactiveCommand.Create(() =>
+            { 
+                    ApplicationUpdateService.GetInstance().CheckForUpdates();
+            });
+            ShowGithubPageCommand = ReactiveCommand.Create(OpenGitHubPage);
             ExecuteUpdateCommand = ReactiveCommand.Create(ExecuteUpdate);
             ShowAboutDialogCommand = ReactiveCommand.Create(ShowAboutDialog);
+            OpenCreateNewProjectCommand = ReactiveCommand.Create(OpenCreateNewProjectDialog);
             new Thread(() => ApplicationUpdateService.GetInstance().CheckForUpdates()).Start();
+        }
+
+        private void OpenCreateNewProjectDialog()
+        {
+            CreateNewProjectDialogViewModel vm = new CreateNewProjectDialogViewModel(DialogManager, ToastManager);
+            DialogManager.CreateDialog(vm)
+                .Dismissible()
+                .Show();
+        }
+        /// <summary>
+        /// This method shows the info page
+        /// </summary>
+        public void OpenGitHubPage()
+        {
+            string url = $"https://aka.botech.dev/bot.acb.editor?from=application&version={ApplicationUpdateService.GetInstance().CurrentVersion.VersionString}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
         /// <summary>
         /// Executes the update but first asks the user if he wants to update.
@@ -55,7 +92,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             ApplicationUpdateService.UpdateInfo latestVersion = ApplicationUpdateService.GetInstance().GetNewVersionInfo();
 
             DialogManager.CreateDialog("Do you want to update now?", 
-                "Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime + ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime + ") \n Info about the latest Version: \n" + latestVersion.InformationString)
+                    "Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime + ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime + ") \n Info about the latest Version: \n" + latestVersion.InformationString)
                 .WithPrimaryButton("Update Now!", () => ApplicationUpdateService.GetInstance().ExecuteUpdateCommand())
                 .WithCancelButton("Remind me later")
                 .Show();

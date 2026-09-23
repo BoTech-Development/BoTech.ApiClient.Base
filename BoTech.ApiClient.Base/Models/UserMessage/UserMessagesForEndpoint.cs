@@ -5,6 +5,7 @@ public class UserMessagesForEndpoint
     /// <summary>
     /// The name of the controller, which this UserMessage is related to
     /// </summary>
+    [Obsolete("Due to the fact that the HttpResultToUserMessageConverter is unique for each client for each controller, this value becomes unnecessary!")]
     public string ControllerName { get; init; }
     /// <summary>
     /// The name of the Endpoint, which this UserMessage is related to

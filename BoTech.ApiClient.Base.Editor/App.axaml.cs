@@ -25,6 +25,7 @@ public partial class App : Application
             {
                 DataContext = ServiceGenerator.ServiceProvider.GetService(typeof(MainViewModel))
             };
+            StorageProviderService.CreateInstance(desktop.MainWindow); // Init file dialog helper
         }
 
         base.OnFrameworkInitializationCompleted();

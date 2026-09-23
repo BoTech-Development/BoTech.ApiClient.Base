@@ -34,7 +34,7 @@ namespace BoTech.ApiClient.Base.Editor.Services
             if (ServiceProvider.GetService(typeof(DialogManager)) is DialogManager manager)
             {
                 manager.Register<AboutDialogView, AboutDialogViewModel>();
-               // manager.Register<ManageProjectDependenciesView, ManageProjectDependenciesViewModel>();
+                manager.Register<CreateNewProjectDialogView, CreateNewProjectDialogViewModel>();
             }
         }
     }

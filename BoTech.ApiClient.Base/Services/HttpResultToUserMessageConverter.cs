@@ -10,16 +10,10 @@ namespace BoTech.ApiClient.Base.Services;
 /// This class can be used to convert the server response into natural language. This class have support for different languages.
 /// This class also stores all the config for the Messages.
 /// </summary>
-public class HttpResultToUserMessageConverter
+public class HttpResultToUserMessageConverter(string baseUrl, string controllerName)
 {
     private List<UserMessagesForEndpoint> _configuration = new List<UserMessagesForEndpoint>();
-    private string _controllerName;
-    private string _baseUrl;
-    public HttpResultToUserMessageConverter(string baseUrl, string controllerName)
-    { 
-        _controllerName = controllerName; 
-        _baseUrl = baseUrl;
-    }
+
     /// <summary>
     /// This method loads the config from a json files stored in the assembly which calls this method.
     /// </summary>
@@ -49,7 +43,7 @@ public class HttpResultToUserMessageConverter
         UserMessagesForEndpoint? userMessageForHttpResult = _configuration.Find(umfe => umfe.Endpoint == actionName);
         if (userMessageForHttpResult == null)
         {
-            userMessageForHttpResult = new UserMessagesForEndpoint(_controllerName, actionName, _baseUrl);
+            userMessageForHttpResult = new UserMessagesForEndpoint(controllerName, actionName, baseUrl);
             _configuration.Add(userMessageForHttpResult);
         }
         // Check if there is already a message defined fo the specific case (HttpStatusCode and returnedString).

@@ -44,8 +44,8 @@ namespace BoTech.ApiClient.Base.Editor.Services
             CurrentVersion = new UpdateInfo()
             {
                 IsLatest = false,
-                VersionString = "v1.0.4.Alpha",
-                ReleaseDateTime = DateTime.Parse("12:15:00 23.09.2026"),
+                VersionString = "v1.0.5.Alpha",
+                ReleaseDateTime = DateTime.Parse("22:00:00 23.09.2026"),
                 InformationString = "This is the current Version you installed. For Release details see the github page: https://github.com/BoTech-Development/BoTech.ApiClient.Base"
             };
         }

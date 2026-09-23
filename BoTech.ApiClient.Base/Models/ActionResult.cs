@@ -48,16 +48,13 @@ public class ActionResult<T>
     public MessageBoxConfiguration GetMessageBoxConfiguration(string languageCode)
     {
         string exceptionString = "";
-        foreach (var error in Errors) exceptionString += error.Message + "\n";
-        return new MessageBoxConfiguration()
-        {
-            Title = IsSuccess ? "Success" : "Error",
-            Success = IsSuccess,
-            Message = UserMessage.First(culturePair => culturePair.Key.TwoLetterISOLanguageName == languageCode).Value,
-            DeveloperInformation = "Status Code: " + Message.StatusCode + "\n"
-                                   + "Reason: " + Message.ReasonPhrase
-                                   + "Internal Exceptions:\n" + exceptionString
-        };
+        foreach (Exception error in Errors) 
+            exceptionString += error.Message + "\n";
+        string message = UserMessage.First(culturePair => culturePair.Key.TwoLetterISOLanguageName == languageCode).Value;
+        string developerInfo = (Message == null ? "Status Code: " + Message.StatusCode + "\n" + "Reason: " + Message.ReasonPhrase + "\n" : "") + "Internal Exceptions:\n" + exceptionString;
+        if (IsSuccess)
+            return MessageBoxConfiguration.SuccessMessageBox("Success", message, developerInfo);
+        return MessageBoxConfiguration.ErrorMessageBox("Error", message, developerInfo);
     }
 
     public override string ToString()

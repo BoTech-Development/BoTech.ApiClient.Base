@@ -2,6 +2,8 @@
   <Folder Name="/Projektmappenelemente/">
     <File Path="Directory.Build.targets" />
   </Folder>
-  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.csproj" Id="7ff02038-269a-437b-9087-d605f7e691b4" />
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.csproj" Id="7ff02038-269a-437b-9087-d605f7e691b4">
+    <BuildDependency Project="BoTech.ApiClient.Base/BoTech.ApiClient.Base.csproj" />
+  </Project>
   <Project Path="BoTech.ApiClient.Base/BoTech.ApiClient.Base.csproj" />
 </Solution>
