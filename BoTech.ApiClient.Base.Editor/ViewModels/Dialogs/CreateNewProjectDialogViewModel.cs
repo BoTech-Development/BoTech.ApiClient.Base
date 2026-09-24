@@ -87,6 +87,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
 
         private void CreateProject()
         {
+            DialogManager.Close(this);
             ProjectController.GetInstance().CreateNewAndOpenProject(new CreateNewProjectData()
             {
                 OpenApiDefinitionJsonFilePath = this.OpenApiDefinitionJsonFilePath,

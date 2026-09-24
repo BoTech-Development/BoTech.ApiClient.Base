@@ -20,13 +20,14 @@ public class UserMessageForHttpResult
 
     /// <summary>
     /// The string that should be returned by the endpoint.
-    /// Is null empty when not necessary to check. <see cref="ShouldCheckReturnedString"/>
+    /// Is empty when not necessary to check. <see cref="ShouldCheckReturnedString"/>
     /// </summary>
     public string ExpectedReturnedString { get; init; } = "";
+
     /// <summary>
     /// Is true when <see cref="ExpectedReturnedString"/> is not empty and the server result should at least contain the string.
     /// </summary>
-    public bool ShouldCheckReturnedString { get; set; } = false;
+    public bool ShouldCheckReturnedString => !string.IsNullOrEmpty(ExpectedReturnedString);
 
     public UserMessageForHttpResult(Dictionary<CultureInfo, string> message, HttpStatusCode statusCode, string returnedString)
     {

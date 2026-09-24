@@ -4,8 +4,13 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
+using BoTech.ApiClient.Base.Editor.Converter;
+using Microsoft.Build.Evaluation;
+using Project = BoTech.ApiClient.Base.Editor.Models.Project;
+using BoTech.ApiClient.Base.Editor.Models.Api;
 
 namespace BoTech.ApiClient.Base.Editor.Controller
 {
@@ -17,7 +22,7 @@ namespace BoTech.ApiClient.Base.Editor.Controller
         /// <summary>
         /// Points to the .bacproj [B]oTech[A]pi[C]lient[Proj]ect file.
         /// </summary>
-        public string PathToTheProjectFile { get; private set;  }
+        public string PathToTheProjectFile { get; private set; }
         /// <summary>
         /// Deserialized project from <see cref="PathToTheProjectFile"/>
         /// </summary>
@@ -39,43 +44,38 @@ namespace BoTech.ApiClient.Base.Editor.Controller
 
         public void CreateNewAndOpenProject(CreateNewProjectData newProjectInfo)
         {
-            Project projectToCreate = new Project();
-            LoadOpenApiDefinitionTo(projectToCreate, newProjectInfo.OpenApiDefinitionJsonFilePath);
-            PathToTheProjectFile = newProjectInfo.ProjectLocation + "\\" + newProjectInfo.ProjectName + ".bacproj";
-            CurrentLoadedProject = projectToCreate;
+            CurrentLoadedProject = new Project()
+            {
+                CustomizedControllers = new List<Models.Api.Controller>(),
+                SharedModelsProjectFilePath = newProjectInfo.SharedModelProjectFile,
+                ApiClientProjectFilePath = newProjectInfo.ProjectLocation + newProjectInfo.ProjectName + "/" + newProjectInfo.ProjectName + ".csproj"
+            };
+            LoadOpenApiDefinitionToCurrentProject(newProjectInfo.OpenApiDefinitionJsonFilePath);
+            CreateApiClientProjectForCurrentProject();
+            PathToTheProjectFile = newProjectInfo.ProjectLocation + newProjectInfo.ProjectName + ".bacproj";
             StoreProject();
-            OnProjectLoaded?.Invoke(this, projectToCreate);
+            OnProjectLoaded?.Invoke(this, CurrentLoadedProject);
         }
         public void StoreProject()
         {
             string serializedProject = JsonSerializer.Serialize(CurrentLoadedProject);
             File.WriteAllText(PathToTheProjectFile, serializedProject);
         }
-        private void LoadOpenApiDefinitionTo(Project projectToLoad, string openApiJsonFilePath)
+        private void LoadOpenApiDefinitionToCurrentProject(string openApiJsonFilePath)
         {
             Stream stream = File.OpenRead(openApiJsonFilePath);
-            projectToLoad.InfoAboutImplementingApi = new OpenApiStreamReader().Read(stream, out var diagnostic);
+            CurrentLoadedProject.InfoAboutImplementingApi = new OpenApiStreamReader().Read(stream, out var diagnostic);
+            OpenApiToProjectConverter.ConvertOpenApiToModels(CurrentLoadedProject, CurrentLoadedProject.InfoAboutImplementingApi);
         }
-
-
-        private void Test()
+        
+        /// <summary>
+        /// This method should build the basic .csproj .dll library project, which is empty.
+        /// </summary>
+        private void CreateApiClientProjectForCurrentProject()
         {
-
-            using var stream = File.OpenRead("swagger.json");
-
-            var document = new OpenApiStreamReader()
-                .Read(stream, out var diagnostic);
-
-            foreach (var path in document.Paths)
-            {
-                Console.WriteLine(path.Key);
-
-                foreach (var operation in path.Value.Operations)
-                {
-                    Console.WriteLine($"  {operation.Key}");
-                    Console.WriteLine($"  {operation.Value.Summary}");
-                }
-            }
+            // TODO: implement the create api client project method.
         }
+
+
     }
 }
