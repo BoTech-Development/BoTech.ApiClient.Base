@@ -33,4 +33,10 @@
     <PackageReference Include="ShadUI" Version="0.2.4" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.17" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Editor\ControllerNavPanelView.axaml.cs">
+      <DependentUpon>ControllerNavPanelView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

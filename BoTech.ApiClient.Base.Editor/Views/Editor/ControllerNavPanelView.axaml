@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor"
+             xmlns:datavm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNavigation"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.Editor.ControllerNavPanelView"
+             x:DataType="vm:ControllerNavPanelViewModel">
+    <Border CornerRadius="{DynamicResource LgCornerRadius}"
+            Padding="4"
+            BorderThickness="2"
+            BorderBrush="#FFCECECE">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Your Controllers"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           VerticalAlignment="Center"/>
+                <Button Classes="Icon">
+                    <shadUi:ButtonAssist.Icon>
+                        <icons:MaterialIcon Kind="DotsVertical"/>
+                    </shadUi:ButtonAssist.Icon>
+                </Button>
+            </StackPanel>
+
+            <TreeView ItemsSource="{Binding UserDefinedControllers}"
+                      CornerRadius="{DynamicResource LgCornerRadius}"
+                      Padding="4"
+                      BorderThickness="2"
+                      BorderBrush="#FFCECECE">
+                <TreeView.DataTemplates>
+
+                    <!-- Template for TypeA -->
+                    <TreeDataTemplate DataType="datavm:ControllerNavItemViewModel"
+                                      ItemsSource="{Binding EndpointsDefinedInController}">
+                        <StackPanel Orientation="Horizontal">
+                            <icons:MaterialIcon Kind="DotsHexagon"
+                                                IconSize="24"/>
+                            <TextBlock Text="{Binding ControllerName}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </TreeDataTemplate>
+
+                    <!-- Template for TypeB -->
+                    <DataTemplate DataType="datavm:EndpointItemViewModel">
+
+                        <StackPanel Orientation="Horizontal">
+                            <icons:MaterialIcon Kind="Function"
+                                                IconSize="24"/>
+                            <TextBlock Text="{Binding EndpointName}" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </DataTemplate>
+
+                </TreeView.DataTemplates>
+            </TreeView>
+
+
+        </StackPanel>
+    </Border>
+</UserControl>

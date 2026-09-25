@@ -16,14 +16,18 @@
             <Menu >
                 <MenuItem Header="File">
                     <MenuItem Header="New Project"
-                              Command="{Binding OpenCreateNewProjectCommand}"/>
-                    <MenuItem Header="Open Project"/>
+                              Command="{Binding OpenCreateNewProjectDialogCommand}"/>
+                    <MenuItem Header="Open Project"
+                              Command="{Binding OpenProjectDialogCommand}"/>
                     <MenuItem Header="Close"/>
                 </MenuItem>
                 <MenuItem Header="Help">
-                    <MenuItem Header="Open GitHub Page" Command="{Binding ShowGithubPageCommand}"/>
-                    <MenuItem Header="Check for updates." Command="{Binding CheckForUpdatesCommand}"/>
-                    <MenuItem Header="About" Command="{Binding ShowAboutDialogCommand}"/>
+                    <MenuItem Header="Open GitHub Page" 
+                              Command="{Binding ShowGithubPageCommand}"/>
+                    <MenuItem Header="Check for updates." 
+                              Command="{Binding CheckForUpdatesCommand}"/>
+                    <MenuItem Header="About" 
+                              Command="{Binding ShowAboutDialogCommand}"/>
                 </MenuItem>
             </Menu>
         </Border>

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using BoTech.ApiClient.Base.Editor.Converter;
 using Microsoft.Build.Evaluation;
 using Project = BoTech.ApiClient.Base.Editor.Models.Project;
@@ -41,7 +42,27 @@ namespace BoTech.ApiClient.Base.Editor.Controller
             _instance ??= new ProjectController(); // ??= is the same as if(_instance is null) _instance = new ...
             return _instance;
         }
-
+        /// <summary>
+        /// This method will load the project from the given file path.
+        /// The file must have the extension .bacproj
+        /// </summary>
+        /// <param name="projectFilePath">the file path</param>
+        public void LoadProjectFromFile(string projectFilePath)
+        {
+            FileInfo projectFileInfo = new FileInfo(projectFilePath);
+            if (!projectFileInfo.Exists)
+                throw new ArgumentException("The project file does not exists! Please select a valid project file!");
+            if (projectFileInfo.Extension != ".bacproj")
+                throw new ArgumentException("The File extension is invalid. Please select the .bacproj");
+            Project? project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projectFileInfo.FullName));
+            CurrentLoadedProject = project ?? throw new ArgumentException("Can not load the project from file. The project file may be corrupted.");
+            PathToTheProjectFile = projectFileInfo.FullName;
+            OnProjectLoaded.Invoke(this, CurrentLoadedProject);
+        }
+        /// <summary>
+        /// This method will create the project from the given data
+        /// </summary>
+        /// <param name="newProjectInfo">The given user data boxed into the <see cref="CreateNewProjectData"/> dto.</param>
         public void CreateNewAndOpenProject(CreateNewProjectData newProjectInfo)
         {
             CurrentLoadedProject = new Project()
@@ -56,18 +77,25 @@ namespace BoTech.ApiClient.Base.Editor.Controller
             StoreProject();
             OnProjectLoaded?.Invoke(this, CurrentLoadedProject);
         }
+        /// <summary>
+        /// Stores the current state of the project to the file path
+        /// </summary>
         public void StoreProject()
         {
             string serializedProject = JsonSerializer.Serialize(CurrentLoadedProject);
             File.WriteAllText(PathToTheProjectFile, serializedProject);
         }
+        /// <summary>
+        /// Loads the open api definition to the project.
+        /// This method will convert the file to the custom models defined in this project <see cref="BoTech.ApiClient.Base.Editor.Models.Project"/>
+        /// </summary>
+        /// <param name="openApiJsonFilePath">the file path to the swagger.json.</param>
         private void LoadOpenApiDefinitionToCurrentProject(string openApiJsonFilePath)
         {
             Stream stream = File.OpenRead(openApiJsonFilePath);
             CurrentLoadedProject.InfoAboutImplementingApi = new OpenApiStreamReader().Read(stream, out var diagnostic);
             OpenApiToProjectConverter.ConvertOpenApiToModels(CurrentLoadedProject, CurrentLoadedProject.InfoAboutImplementingApi);
         }
-        
         /// <summary>
         /// This method should build the basic .csproj .dll library project, which is empty.
         /// </summary>
@@ -75,7 +103,5 @@ namespace BoTech.ApiClient.Base.Editor.Controller
         {
             // TODO: implement the create api client project method.
         }
-
-
     }
 }

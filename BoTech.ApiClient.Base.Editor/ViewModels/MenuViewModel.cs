@@ -1,11 +1,14 @@
-﻿using ReactiveUI;
+﻿using Avalonia.Platform.Storage;
+using BoTech.ApiClient.Base.Editor.Services;
+using BoTech.ApiClient.Base.Editor.ViewModels.Dialogs;
+using ReactiveUI;
 using ReactiveUI.Primitives;
 using ShadUI;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
-using BoTech.ApiClient.Base.Editor.Services;
-using BoTech.ApiClient.Base.Editor.ViewModels.Dialogs;
+using BoTech.ApiClient.Base.Editor.Controller;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels
 {
@@ -35,8 +38,14 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// opens the GitHub page in the web browser
         /// </summary>
         public ReactiveCommand<RxVoid, RxVoid> ShowGithubPageCommand { get; set; }
-
-        public ReactiveCommand<RxVoid, RxVoid> OpenCreateNewProjectCommand { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ReactiveCommand<RxVoid, RxVoid> OpenCreateNewProjectDialogCommand { get; set; }
+        /// <summary>
+        /// let the user select the project file and opens the project.
+        /// </summary>
+        public ReactiveCommand<RxVoid, RxVoid> OpenProjectDialogCommand { get; set; }
 
         public MenuViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
         {
@@ -60,10 +69,36 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             ShowGithubPageCommand = ReactiveCommand.Create(OpenGitHubPage);
             ExecuteUpdateCommand = ReactiveCommand.Create(ExecuteUpdate);
             ShowAboutDialogCommand = ReactiveCommand.Create(ShowAboutDialog);
-            OpenCreateNewProjectCommand = ReactiveCommand.Create(OpenCreateNewProjectDialog);
+            OpenCreateNewProjectDialogCommand = ReactiveCommand.Create(OpenCreateNewProjectDialog);
+            OpenProjectDialogCommand = ReactiveCommand.Create(OpenProjectDialog);
             new Thread(() => ApplicationUpdateService.GetInstance().CheckForUpdates()).Start();
         }
-
+        /// <summary>
+        /// let the user select the project file and opens the project.
+        /// </summary>
+        private void OpenProjectDialog()
+        {
+            IStorageFile? file = OpenFileSelector("Select a .bacproj");
+            if(file is not null)
+            {
+                ProjectController.GetInstance().OnProjectLoaded += (sender, loadedProject) =>
+                {
+                    EditorViewController.Instance!.InitializeViewsForProject(loadedProject); // Nullable is necessary to check because it is set MainViewModel.cs .
+                };
+                ProjectController.GetInstance().LoadProjectFromFile(file.Path.AbsolutePath);
+            }
+        }
+        private IStorageFile? OpenFileSelector(string title)
+        {
+            return StorageProviderService.GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                Title = title,
+                AllowMultiple = false
+            }).Result.FirstOrDefault();
+        }
+        /// <summary>
+        /// Shows the create new dialog 
+        /// </summary>
         private void OpenCreateNewProjectDialog()
         {
             CreateNewProjectDialogViewModel vm = new CreateNewProjectDialogViewModel(DialogManager, ToastManager);
