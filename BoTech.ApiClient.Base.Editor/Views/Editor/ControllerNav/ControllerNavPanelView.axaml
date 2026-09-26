@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor"
-             xmlns:datavm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNavigation"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav"
              x:Class="BoTech.ApiClient.Base.Editor.Views.Editor.ControllerNavPanelView"
              x:DataType="vm:ControllerNavPanelViewModel">
+    <Design.DataContext>
+        <vm:ControllerNavPanelViewModel/>
+    </Design.DataContext>
     <Border CornerRadius="{DynamicResource LgCornerRadius}"
             Padding="4"
             BorderThickness="2"
@@ -25,34 +27,53 @@
                 </Button>
             </StackPanel>
 
+
+
             <TreeView ItemsSource="{Binding UserDefinedControllers}"
                       CornerRadius="{DynamicResource LgCornerRadius}"
                       Padding="4"
                       BorderThickness="2"
-                      BorderBrush="#FFCECECE">
+                      BorderBrush="#FFCECECE"
+                      SelectedItem="{Binding SelectedEndpointOrController}">
                 <TreeView.DataTemplates>
 
                     <!-- Template for TypeA -->
-                    <TreeDataTemplate DataType="datavm:ControllerNavItemViewModel"
+                    <TreeDataTemplate DataType="vm:ControllerNavItemViewModel"
                                       ItemsSource="{Binding EndpointsDefinedInController}">
                         <StackPanel Orientation="Horizontal">
                             <icons:MaterialIcon Kind="DotsHexagon"
                                                 IconSize="24"/>
                             <TextBlock Text="{Binding ControllerName}"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"/>
                         </StackPanel>
 
                     </TreeDataTemplate>
 
                     <!-- Template for TypeB -->
-                    <DataTemplate DataType="datavm:EndpointItemViewModel">
+                    <DataTemplate DataType="vm:EndpointItemViewModel">
 
-                        <StackPanel Orientation="Horizontal">
-                            <icons:MaterialIcon Kind="Function"
+                        <Grid ColumnDefinitions="Auto,Auto,*">
+                            <icons:MaterialIcon Grid.Column="0"
+                                                Kind="Function"
                                                 IconSize="24"/>
-                            <TextBlock Text="{Binding EndpointName}" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
+                            <TextBlock Grid.Column="1" 
+                                       Text="{Binding EndpointName}" 
+                                       VerticalAlignment="Center"
+                                       FontSize="14"/>
+                            <Border Grid.Column="2" 
+                                    BorderBrush="{Binding HttpMethodIndicatorBorderColor}"
+                                    BorderThickness="2"
+                                    CornerRadius="8"
+                                    Background="{Binding HttpMethodIndicatorBackgroundColor}"
+                                    Padding="2"
+                                    HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding HttpMethodName}"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
 
                     </DataTemplate>
 

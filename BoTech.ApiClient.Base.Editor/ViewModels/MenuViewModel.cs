@@ -8,7 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using BoTech.ApiClient.Base.Editor.Controller;
+using BoTech.ApiClient.Base.Editor.Controllers;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels
 {
@@ -81,9 +81,9 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             IStorageFile? file = OpenFileSelector("Select a .bacproj");
             if(file is not null)
             {
-                ProjectController.GetInstance().OnProjectLoaded += (sender, loadedProject) =>
+                ProjectController.GetInstance().OnProjectLoaded += (sender, eventArgs) =>
                 {
-                    EditorViewController.Instance!.InitializeViewsForProject(loadedProject); // Nullable is necessary to check because it is set MainViewModel.cs .
+                    EditorViewController.Instance!.InitializeViewsForCurrentProject(); // Nullable is necessary to check because it is set MainViewModel.cs .
                 };
                 ProjectController.GetInstance().LoadProjectFromFile(file.Path.AbsolutePath);
             }

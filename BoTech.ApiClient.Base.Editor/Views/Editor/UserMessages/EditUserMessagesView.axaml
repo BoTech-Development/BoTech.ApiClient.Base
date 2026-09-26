@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor.UserMessages"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.Editor.UserMessages.EditUserMessagesView"
+             x:DataType="vm:EditUserMessagesViewModel">
+  <StackPanel Orientation="Horizontal">
+      <StackPanel>
+          <TextBlock Text="Possible Results for..."
+                     FontSize="22"
+                     FontWeight="Bold"/>
+          <ItemsControl ItemsSource="{Binding PossibleResults}">
+              <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                      <StackPanel Orientation="Horizontal">
+                          <TextBlock Text="{Binding ServerResultStatusCode}"/>
+                          <Border BorderBrush="{Binding ServerResultIndicatorBorderBrush}"
+                                  Background="{Binding ServerResultIndicatorBackgroundBrush}"
+                                  BorderThickness="1"
+                                  CornerRadius="2">
+                              <TextBlock Text="{Binding DtoNameOrReturnTypeName}" />
+                          </Border>
+                      </StackPanel>
+                  </DataTemplate>
+              </ItemsControl.ItemTemplate>
+          </ItemsControl>
+      </StackPanel>
+      <Separator Height="NaN" 
+                 Margin="5,0,5,0"
+                 CornerRadius="2"
+                 BorderThickness="4"/>
+      <StackPanel>
+          <TextBlock Text="User Message:"
+                     FontSize="22"
+                     FontWeight="Bold"/>
+          <ComboBox shadUi:ControlAssist.Label="Your language:">
+              <ComboBoxItem>German</ComboBoxItem>
+          </ComboBox>
+          <TextBox Classes="Clearable"
+                   UseFloatingPlaceholder="True"
+                   PlaceholderText="Natural language description of the result."
+                   shadUi:ControlAssist.Label="User Message:"
+                   Margin="0,10,0,0"/>
+          <TextBlock Text="Auto translations:"
+                     FontSize="20"
+                     FontWeight="SemiBold"/>
+          <ItemsControl>
+              <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                      <StackPanel Orientation="Horizontal">
+                          <Border BorderBrush="Gray"
+                                  Background="LightGray">
+                              <TextBlock />
+                          </Border>
+                          <TextBlock/>
+                      </StackPanel>
+                  </DataTemplate>
+              </ItemsControl.ItemTemplate>
+          </ItemsControl>
+      </StackPanel>
+  </StackPanel>
+</UserControl>

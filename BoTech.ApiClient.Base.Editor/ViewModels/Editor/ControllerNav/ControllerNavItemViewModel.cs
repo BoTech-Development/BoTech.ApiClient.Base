@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNavigation
+namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav
 {
     internal class ControllerNavItemViewModel
     {

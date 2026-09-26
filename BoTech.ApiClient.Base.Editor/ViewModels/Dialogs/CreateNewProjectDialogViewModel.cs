@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BoTech.ApiClient.Base.Editor.Controller;
+using BoTech.ApiClient.Base.Editor.Controllers;
 using BoTech.ApiClient.Base.Editor.Models;
 using BoTech.ApiClient.Base.Editor.Services;
 
@@ -68,6 +68,11 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
                 });
             CreateProjectCommand = ReactiveCommand.Create(CreateProject);
         }
+        /// <summary>
+        /// opens a native folder selector view
+        /// </summary>
+        /// <param name="title">The title of the view.</param>
+        /// <returns>the selected folder or null when no folder selected.</returns>
         private IStorageFolder? OpenFolderSelector(string title)
         {
             return StorageProviderService.GetStorageProvider().OpenFolderPickerAsync(new FolderPickerOpenOptions()
@@ -76,6 +81,11 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
                 AllowMultiple = false
             }).Result.FirstOrDefault();
         }
+        /// <summary>
+        /// opens a native file selector view
+        /// </summary>
+        /// <param name="title">The title of the view.</param>
+        /// <returns>the selected file or null when no file selected.</returns>
         private IStorageFile? OpenFileSelector(string title)
         {
             return StorageProviderService.GetStorageProvider().OpenFilePickerAsync(new FilePickerOpenOptions()
@@ -88,9 +98,9 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
         private void CreateProject()
         {
             DialogManager.Close(this);
-            ProjectController.GetInstance().OnProjectLoaded += (sender, loadedProject) =>
+            ProjectController.GetInstance().OnProjectLoaded += (sender, eventArgs) =>
             {
-                EditorViewController.Instance!.InitializeViewsForProject(loadedProject); // Nullable is necessary to check because it is set MainViewModel.cs .
+                EditorViewController.Instance!.InitializeViewsForCurrentProject(); // Nullable is necessary to check because it is set MainViewModel.cs .
             };
             ProjectController.GetInstance().CreateNewAndOpenProject(new CreateNewProjectData()
             {

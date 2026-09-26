@@ -5,6 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+	<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,8 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Editor\ControllerNavPanelView.axaml.cs">
+    <Compile Update="Views\Editor\ControllerNav\ControllerNavPanelView.axaml.cs">
       <DependentUpon>ControllerNavPanelView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Editor\Main\MainTabPanelView.axaml.cs">
+      <DependentUpon>MainTabPanelView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

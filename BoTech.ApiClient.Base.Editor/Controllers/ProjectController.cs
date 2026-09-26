@@ -13,7 +13,7 @@ using Microsoft.Build.Evaluation;
 using Project = BoTech.ApiClient.Base.Editor.Models.Project;
 using BoTech.ApiClient.Base.Editor.Models.Api;
 
-namespace BoTech.ApiClient.Base.Editor.Controller
+namespace BoTech.ApiClient.Base.Editor.Controllers
 {
     /// <summary>
     /// This singleton manages the project.
@@ -32,7 +32,7 @@ namespace BoTech.ApiClient.Base.Editor.Controller
         /// Will be raised when after the first loading of the project.
         /// Can be used to update the ui.
         /// </summary>
-        public EventHandler<Project> OnProjectLoaded;
+        public EventHandler OnProjectLoaded;
 
         private static ProjectController? _instance;
         private ProjectController() { }
@@ -57,7 +57,7 @@ namespace BoTech.ApiClient.Base.Editor.Controller
             Project? project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projectFileInfo.FullName));
             CurrentLoadedProject = project ?? throw new ArgumentException("Can not load the project from file. The project file may be corrupted.");
             PathToTheProjectFile = projectFileInfo.FullName;
-            OnProjectLoaded.Invoke(this, CurrentLoadedProject);
+            OnProjectLoaded.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// This method will create the project from the given data
@@ -75,7 +75,7 @@ namespace BoTech.ApiClient.Base.Editor.Controller
             CreateApiClientProjectForCurrentProject();
             PathToTheProjectFile = newProjectInfo.ProjectLocation + newProjectInfo.ProjectName + ".bacproj";
             StoreProject();
-            OnProjectLoaded?.Invoke(this, CurrentLoadedProject);
+            OnProjectLoaded?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Stores the current state of the project to the file path

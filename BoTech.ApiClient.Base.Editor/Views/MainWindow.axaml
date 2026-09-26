@@ -23,6 +23,8 @@
         <StackPanel Orientation="Horizontal">
             <ContentControl Margin="8,0,0,0"
                             Content="{Binding ControllerNavPanelView}"/>
+            <ContentControl Margin="5,0,0,0"
+                            Content="{Binding MainTabPanelView}"/>
         </StackPanel>
     </StackPanel>
 
