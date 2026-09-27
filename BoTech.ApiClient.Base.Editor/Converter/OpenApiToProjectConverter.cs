@@ -64,9 +64,10 @@ namespace BoTech.ApiClient.Base.Editor.Converter
         }
         private static HttpStatusCode ConvertStatusCodeStringToEnum(string statusCode)
         {
-            if (Enum.IsDefined(typeof(HttpStatusCode), statusCode))
+            int statusCodeAsInt = int.Parse(statusCode);
+            if (Enum.IsDefined(typeof(HttpStatusCode), statusCodeAsInt))
             {
-                return Enum.Parse<HttpStatusCode>(statusCode);
+                return (HttpStatusCode)statusCodeAsInt;
             }
             return default(HttpStatusCode);
         }

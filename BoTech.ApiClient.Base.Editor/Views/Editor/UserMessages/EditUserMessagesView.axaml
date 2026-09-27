@@ -15,12 +15,16 @@
               <ItemsControl.ItemTemplate>
                   <DataTemplate>
                       <StackPanel Orientation="Horizontal">
-                          <TextBlock Text="{Binding ServerResultStatusCode}"/>
+                          <TextBlock Text="{Binding DtoNameOrReturnTypeName}"
+                                     VerticalAlignment="Center"
+                                     FontSize="18"/>
                           <Border BorderBrush="{Binding ServerResultIndicatorBorderBrush}"
                                   Background="{Binding ServerResultIndicatorBackgroundBrush}"
-                                  BorderThickness="1"
-                                  CornerRadius="2">
-                              <TextBlock Text="{Binding DtoNameOrReturnTypeName}" />
+                                  BorderThickness="2"
+                                  CornerRadius="8"
+                                  Padding="2">
+                              <TextBlock Text="{Binding ServerResultStatusCode}" 
+                                         FontWeight="SemiBold"/>
                           </Border>
                       </StackPanel>
                   </DataTemplate>

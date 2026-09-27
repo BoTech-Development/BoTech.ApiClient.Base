@@ -10,28 +10,31 @@
     <Design.DataContext>
         <vm:MainTabPanelViewModel/>
     </Design.DataContext>
-    <TabControl ItemsSource="{Binding Tabs}">
-      <TabControl.ItemTemplate>
-          <DataTemplate DataType="vm:MainTabPanelViewModel+TabPage">
-              <StackPanel Orientation="Horizontal">
-                  <TextBlock Text="{Binding Header}" 
-                             VerticalAlignment="Center"/>
-                  <Button Classes="Icon"
-                          Command="{Binding $parent[UserControl].DataContext.CloseSpecificTabCommand}"
-                          CommandParameter="{Binding}">
-                      <shadUi:ButtonAssist.Icon>
-                          <material:MaterialIcon Kind="Close"/>
-                      </shadUi:ButtonAssist.Icon>
-                  </Button>
-              </StackPanel>
-
-
-          </DataTemplate>
-      </TabControl.ItemTemplate>
-      <TabControl.ContentTemplate>
-          <DataTemplate DataType="vm:MainTabPanelViewModel+TabPage">
-              <ContentControl Content="{Binding Content}" />
-          </DataTemplate>
-      </TabControl.ContentTemplate>
-  </TabControl>
+    <Border CornerRadius="{DynamicResource LgCornerRadius}"
+            Padding="4"
+            BorderThickness="2"
+            BorderBrush="#FFCECECE">
+        <TabControl ItemsSource="{Binding Tabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="vm:MainTabPanelViewModel+TabPage">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Header}" 
+                                   VerticalAlignment="Center"/>
+                        <Button Classes="Icon"
+                                Command="{Binding $parent[UserControl].DataContext.CloseSpecificTabCommand}"
+                                CommandParameter="{Binding}">
+                            <shadUi:ButtonAssist.Icon>
+                                <material:MaterialIcon Kind="Close"/>
+                            </shadUi:ButtonAssist.Icon>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="vm:MainTabPanelViewModel+TabPage">
+                    <ContentControl Content="{Binding Content}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+  </Border>
 </UserControl>
