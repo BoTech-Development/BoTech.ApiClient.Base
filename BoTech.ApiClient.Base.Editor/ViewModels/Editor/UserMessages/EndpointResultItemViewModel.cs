@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Avalonia.Media;
+using BoTech.ApiClient.Base.Editor.Models.Api;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.UserMessages
 {
     internal class EndpointResultItemViewModel
     {
+        public required EndpointResult ReferencedEndpointResult { get; set; }
         public required IBrush ServerResultIndicatorBackgroundBrush { get; set; }
         public required IBrush ServerResultIndicatorBorderBrush { get; set; }
         /// <summary>

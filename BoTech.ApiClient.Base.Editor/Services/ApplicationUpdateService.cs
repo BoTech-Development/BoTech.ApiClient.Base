@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BoTech.ApiClient.Base.Editor.Services
 {
@@ -53,11 +54,11 @@ namespace BoTech.ApiClient.Base.Editor.Services
         public async Task CheckForUpdates()
         {
             HttpRequestHelper requestHelper = new HttpRequestHelper("https://assets.botech.dev/");
-            RequestResult<string> getAllVersionsResult = await requestHelper.HttpGetFileContents("static-app-update/BoTech.ApiClient.Base.Editor/versions.json");
+            RequestResult getAllVersionsResult = await requestHelper.HttpGetFileContents("static-app-update/BoTech.ApiClient.Base.Editor/versions.json");
             //RequestResult<List<UpdateInfo>> getAllVersionsResult = requestHelper.HttpGetJsonObject<List<UpdateInfo>>("/static-app-update/BoTech.ApiClient.Base.Editor/versions.json").Result;
             if (getAllVersionsResult.IsSuccess() && getAllVersionsResult.ParsedData != null)
             {
-                List<UpdateInfo>? versions = JsonConvert.DeserializeObject<List<UpdateInfo>>(getAllVersionsResult.ParsedData);
+                List<UpdateInfo>? versions = JsonSerializer.Deserialize<List<UpdateInfo>>(getAllVersionsResult.ParsedData!.ToString()!);
                 if (versions == null) 
                     throw new InvalidOperationException("Could not parse the versions.json file.");
                 _nextVersion = FindLatestVersionInGetAllVersionsResult(versions);

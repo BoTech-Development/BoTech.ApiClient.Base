@@ -31,6 +31,6 @@ namespace BoTech.ApiClient.Base.Editor.Models.Api
         /// <summary>
         /// Contains a natural by the user readable text, describing the server response.
         /// </summary>
-        public NaturalLanguageMessage? Message { get; init; }
+        public NaturalLanguageMessage? Message { get; set; }
     }
 }

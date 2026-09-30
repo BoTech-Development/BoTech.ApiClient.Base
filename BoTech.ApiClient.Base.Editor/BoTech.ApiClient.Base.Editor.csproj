@@ -25,12 +25,13 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="BoTech.HttpClientHelper" Version="1.0.4-Alpha" />
+    <PackageReference Include="BoTech.ApiClient.LibreTranslate" Version="1.1.0" />
+    <PackageReference Include="BoTech.HttpClientHelper" Version="1.0.7-Alpha" />
     <PackageReference Include="Material.Icons.Avalonia" Version="3.0.2" />
     <PackageReference Include="Microsoft.Build" Version="18.10.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
     <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.31" />
-    <PackageReference Include="ReactiveUI.Avalonia" Version="12.1.2" />
+    <PackageReference Include="ReactiveUI.Avalonia" Version="12.1.5" />
     <PackageReference Include="ShadUI" Version="0.2.4" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.17" />
   </ItemGroup>

@@ -10,7 +10,7 @@ namespace BoTech.ApiClient.Base.Editor.Models
         /// <summary>
         /// The natural language result, which is readable by the user.
         /// </summary>
-        public Dictionary<CultureInfo, string> UserMessage { get; init; }
+        public Dictionary<CultureInfo, string> UserMessages { get; init; } = new Dictionary<CultureInfo, string>();
         /// <summary>
         /// The string that should be returned by the endpoint.
         /// Is empty when not necessary to check. <see cref="ShouldCheckReturnedString"/>
