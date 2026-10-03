@@ -21,6 +21,11 @@
                               Command="{Binding OpenProjectDialogCommand}"/>
                     <MenuItem Header="Close"/>
                 </MenuItem>
+                <MenuItem Header="Export">
+                    <MenuItem Header="Export BoTech.ApiClient.Base config json." 
+                              Command="{Binding ExportApiClientBaseConfigJson}"/>
+                    <MenuItem Header="build Api Client Project"/>
+                </MenuItem>
                 <MenuItem Header="Help">
                     <MenuItem Header="Open GitHub Page" 
                               Command="{Binding ShowGithubPageCommand}"/>

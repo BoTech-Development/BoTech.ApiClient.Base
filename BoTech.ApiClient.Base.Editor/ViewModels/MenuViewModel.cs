@@ -47,6 +47,8 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// </summary>
         public ReactiveCommand<RxVoid, RxVoid> OpenProjectDialogCommand { get; set; }
 
+        public ReactiveCommand<RxVoid, RxVoid> ExportApiClientBaseConfigJson { get; set; }
+
         public MenuViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
         {
             ApplicationUpdateService.GetInstance().OnNewUpdateFound +=
@@ -71,6 +73,10 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             ShowAboutDialogCommand = ReactiveCommand.Create(ShowAboutDialog);
             OpenCreateNewProjectDialogCommand = ReactiveCommand.Create(OpenCreateNewProjectDialog);
             OpenProjectDialogCommand = ReactiveCommand.Create(OpenProjectDialog);
+            ExportApiClientBaseConfigJson = ReactiveCommand.Create(() =>
+            {
+                ProjectController.GetInstance().ExportApiClientBaseConfigJson();
+            });
             new Thread(() => ApplicationUpdateService.GetInstance().CheckForUpdates()).Start();
         }
         /// <summary>

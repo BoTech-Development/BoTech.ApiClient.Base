@@ -12,6 +12,7 @@ using BoTech.ApiClient.Base.Editor.Converter;
 using Microsoft.Build.Evaluation;
 using Project = BoTech.ApiClient.Base.Editor.Models.Project;
 using BoTech.ApiClient.Base.Editor.Models.Api;
+using BoTech.ApiClient.Base.Models.UserMessage;
 
 namespace BoTech.ApiClient.Base.Editor.Controllers
 {
@@ -85,6 +86,25 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
             string serializedProject = JsonSerializer.Serialize(CurrentLoadedProject);
             File.WriteAllText(PathToTheProjectFile, serializedProject);
         }
+
+        private void ConvertModelsToUserMessageModels()
+        {
+            foreach (Controller controller in CurrentLoadedProject.CustomizedControllers)
+            {
+                controller.UserResultMessages.Clear();
+                UserMessagesForEndpoint userMessagesForEndpoint = null;
+                foreach (Endpoint endpoint in controller.DefinedEndpointsInController)
+                {
+                    userMessagesForEndpoint = new UserMessagesForEndpoint(controller.ControllerName, endpoint.MethodName, "");
+                    foreach (EndpointResult possibleResult in endpoint.PossibleResults)
+                    {
+                        if (possibleResult.Message != null)
+                            userMessagesForEndpoint.UserMessages.Add(new UserMessageForHttpResult(possibleResult.Message.UserMessages, possibleResult.ServerResultStatusCode, possibleResult.Message.ExpectedReturnedString));
+                    }
+                    controller.UserResultMessages.Add(userMessagesForEndpoint);
+                }
+            }
+        }
         /// <summary>
         /// Loads the open api definition to the project.
         /// This method will convert the file to the custom models defined in this project <see cref="BoTech.ApiClient.Base.Editor.Models.Project"/>
@@ -102,6 +122,15 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         private void CreateApiClientProjectForCurrentProject()
         {
             // TODO: implement the create api client project method.
+        }
+
+        public void ExportApiClientBaseConfigJson()
+        {
+            ConvertModelsToUserMessageModels();
+            foreach (Controller controller in CurrentLoadedProject.CustomizedControllers)
+            {
+                File.WriteAllText($"C:\\Users\\fteet\\Downloads\\ClientConfig-{controller.ControllerName}.json", JsonSerializer.Serialize(controller.UserResultMessages));
+            }
         }
     }
 }
