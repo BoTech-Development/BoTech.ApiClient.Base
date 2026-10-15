@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using BoTech.ApiClient.Base.Models.UserMessage;
+
+namespace BoTech.ApiClient.Base.Editor.Models.Api
+{
+    internal class Controller
+    {
+        /// <summary>
+        /// The name of the controller (this name may be not equals to the actual class name)
+        /// </summary>
+        public required string ControllerName { get; init; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<Endpoint> DefinedEndpointsInController { get; set; } = new List<Endpoint>();
+        /// <summary>
+        /// This so-called user messages define a natural language response for each server result.
+        /// </summary>
+        public List<UserMessagesForEndpoint> UserResultMessages { get; init; } = new List<UserMessagesForEndpoint>();
+    }
+}

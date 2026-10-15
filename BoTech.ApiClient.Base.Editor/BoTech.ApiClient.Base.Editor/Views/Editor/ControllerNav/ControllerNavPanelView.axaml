@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.Editor.ControllerNavPanelView"
+             x:DataType="vm:ControllerNavPanelViewModel">
+    <Design.DataContext>
+        <vm:ControllerNavPanelViewModel/>
+    </Design.DataContext>
+    <Border CornerRadius="{DynamicResource LgCornerRadius}"
+            Padding="4"
+            BorderThickness="2"
+            BorderBrush="#FFCECECE">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Your Controllers"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           VerticalAlignment="Center"/>
+                <Button Classes="Icon">
+                    <shadUi:ButtonAssist.Icon>
+                        <icons:MaterialIcon Kind="DotsVertical"/>
+                    </shadUi:ButtonAssist.Icon>
+                </Button>
+            </StackPanel>
+
+
+
+            <TreeView ItemsSource="{Binding UserDefinedControllers}"
+                      CornerRadius="{DynamicResource LgCornerRadius}"
+                      Padding="4"
+                      BorderThickness="2"
+                      BorderBrush="#FFCECECE"
+                      SelectedItem="{Binding SelectedEndpointOrController}">
+                <TreeView.DataTemplates>
+
+                    <!-- Template for TypeA -->
+                    <TreeDataTemplate DataType="vm:ControllerNavItemViewModel"
+                                      ItemsSource="{Binding EndpointsDefinedInController}">
+                        <StackPanel Orientation="Horizontal">
+                            <icons:MaterialIcon Kind="DotsHexagon"
+                                                IconSize="24"/>
+                            <TextBlock Text="{Binding ControllerName}"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                    </TreeDataTemplate>
+
+                    <!-- Template for TypeB -->
+                    <DataTemplate DataType="vm:EndpointItemViewModel">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*">
+                            <icons:MaterialIcon Grid.Column="0"
+                                                Kind="Function"
+                                                IconSize="24"/>
+                            <TextBlock Grid.Column="1" 
+                                       Text="{Binding EndpointName}" 
+                                       VerticalAlignment="Center"
+                                       FontSize="14"/>
+                            <Border Grid.Column="2" 
+                                    BorderBrush="{Binding HttpMethodIndicatorBorderColor}"
+                                    BorderThickness="2"
+                                    CornerRadius="8"
+                                    Background="{Binding HttpMethodIndicatorBackgroundColor}"
+                                    Padding="2"
+                                    HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding HttpMethodName}"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
+
+                    </DataTemplate>
+
+                </TreeView.DataTemplates>
+            </TreeView>
+
+
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -5,6 +5,7 @@ public class UserMessagesForEndpoint
     /// <summary>
     /// The name of the controller, which this UserMessage is related to
     /// </summary>
+    [Obsolete("Due to the fact that the HttpResultToUserMessageConverter is unique for each client for each controller, this value becomes unnecessary!")]
     public string ControllerName { get; init; }
     /// <summary>
     /// The name of the Endpoint, which this UserMessage is related to
@@ -17,7 +18,7 @@ public class UserMessagesForEndpoint
     /// <summary>
     /// All user messages for the specific Endpoint => Needed because endpoint can return multiple status codes.
     /// </summary>
-    public List<UserMessageForHttpResult> UserMessages { get; init; }
+    public List<UserMessageForHttpResult> UserMessages { get; init; } = new List<UserMessageForHttpResult>();
 
     public UserMessagesForEndpoint(string controllerName, string endpoint, string baseUrl)
     {

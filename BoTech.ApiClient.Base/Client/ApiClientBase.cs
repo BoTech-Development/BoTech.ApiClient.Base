@@ -7,7 +7,9 @@ using BoTech.ApiClient.Base.Services;
 using BoTech.HttpClientHelper;
 
 namespace BoTech.ApiClient.Base.Client;
-
+/// <summary>
+/// Each Api Client must inherit from this class.
+/// </summary>
 public class ApiClientBase
 {
     private string _baseUrl;
@@ -17,10 +19,19 @@ public class ApiClientBase
     public ApiClientBase(HttpRequestHelper requestHelper, string controllerName, string baseUrl)
     {
         _httpRequestHelper = requestHelper;
-        _httpResultToUserMessageConverter = new HttpResultToUserMessageConverter(baseUrl, controllerName);
+        _baseUrl = baseUrl;
+        _controllerName = controllerName;
+        _httpResultToUserMessageConverter = new HttpResultToUserMessageConverter(_baseUrl, _controllerName);
     }
-
-    public ActionResult<T> Result<T>(RequestResult<T> requestResult)
+    /// <summary>
+    /// This method must be called after sending a request to the server.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="requestResult">Server result after sending request.</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">Internal error by fetching info about the method which calls this method.</exception>
+    /// <exception cref="InvalidOperationException">Missing the ApiClientEndpoint attribute (annotation) for the method which calls the Method Result.</exception>
+    public ActionResult Result(RequestResult requestResult)
     {
         // Frame 0 = this method
         // Frame 1 = the method that called this method
@@ -36,6 +47,6 @@ public class ApiClientBase
             }
         }
         if (string.IsNullOrEmpty(endpoint)) throw new InvalidOperationException("You might not defined the attribute ApiClientEndpoint which is required for all methods that call this method.");
-        return ActionResult<T>.FromRequestResult(endpoint, requestResult, _httpResultToUserMessageConverter);
+        return ActionResult.FromRequestResult(endpoint, requestResult, _httpResultToUserMessageConverter);
     }
 }

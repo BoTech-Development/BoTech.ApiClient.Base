@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogs="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels.Dialogs"
+             xmlns:svg="clr-namespace:Avalonia.Svg.Skia;assembly=Svg.Controls.Skia.Avalonia"
+             x:DataType="dialogs:AboutDialogViewModel"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.Dialogs.AboutDialogView">
+  <StackPanel Margin="15">
+      <svg:Svg Path="avares://BoTech.ApiClient.Base.Editor/Assets/BoTechLogoCompleteWithSlogan.drawio.svg"
+               Stretch="Uniform"
+               EnableCache="True"
+               Wireframe="False" 
+               Width="512"/>
+      <TextBlock Text="This application is brought to you by www.BoTech.dev." FontWeight="Bold" FontSize="26"/>
+      <StackPanel Orientation="Horizontal">
+          <TextBlock Text="You are using Version:" FontWeight="SemiBold" FontSize="18"/>
+          <TextBlock Text="{Binding VersionStringIncludingDate}" FontSize="18"/>
+      </StackPanel>
+      <TextBlock Text="Copyright: © 2026 www.botech.dev All Rights Reserved!" FontWeight="DemiBold" FontSize="18"/>
+  </StackPanel>
+</UserControl>

@@ -1,3 +1,11 @@
 <Solution>
-  <Project Path="BoTech.ApiClient.Base/BoTech.ApiClient.Base.csproj" />
+  <Folder Name="/Projektmappenelemente/">
+    <File Path="Directory.Build.targets" />
+  </Folder>
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.Android/BoTech.ApiClient.Base.Editor.Android.csproj" Id="12bb1284-7878-4e8a-9dd8-1dfadfc00572" />
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.Browser/BoTech.ApiClient.Base.Editor.Browser.csproj" Id="820b5c55-2a7c-40c8-a402-3a43b6bd027d" />
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.Desktop/BoTech.ApiClient.Base.Editor.Desktop.csproj" Id="160a3d07-5785-4c2d-a2d5-0d98e9339da0" />
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.iOS/BoTech.ApiClient.Base.Editor.iOS.csproj" Id="6599b122-7a37-4bae-ac97-25a56999b431" />
+  <Project Path="BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor/BoTech.ApiClient.Base.Editor.csproj" Id="bbc92e5d-cbbe-49f5-8f2a-11528634b52f" />
+  <Project Path="BoTech.ApiClient.Base/BoTech.ApiClient.Base.csproj" /> 
 </Solution>
