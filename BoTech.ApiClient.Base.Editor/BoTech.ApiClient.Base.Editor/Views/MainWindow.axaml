@@ -1,31 +1,13 @@
 ﻿<shadUi:Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:BoTech.ApiClient.Base.Editor.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:BoTech.ApiClient.Base.Editor.Views"
-        xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
-        x:Class="BoTech.ApiClient.Base.Editor.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="BoTech.ApiClient.Base.Editor">
-
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainViewModel />
-    </Design.DataContext>
-    <shadUi:Window.Hosts>
-        <shadUi:DialogHost Manager="{Binding DialogManagerProperty}"/>
-    </shadUi:Window.Hosts>
-    <StackPanel>
-        <ContentControl Content="{Binding MenuViewContent}"/>
-        <StackPanel Orientation="Horizontal">
-            <ContentControl Margin="8,0,0,0"
-                            Content="{Binding ControllerNavPanelView}"/>
-            <ContentControl Margin="5,0,0,0"
-                            Content="{Binding MainTabPanelView}"/>
-        </StackPanel>
-    </StackPanel>
-
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:vm="using:BoTech.ApiClient.Base.Editor.ViewModels"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:views="clr-namespace:BoTech.ApiClient.Base.Editor.Views"
+               xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+               x:Class="BoTech.ApiClient.Base.Editor.Views.MainWindow"
+               x:DataType="vm:MainViewModel"
+               Icon="/Assets/avalonia-logo.ico"
+               Title="BoTech.ApiClient.Base.Editor">
+    <ContentControl x:Name="mainContent"/>
 </shadUi:Window>

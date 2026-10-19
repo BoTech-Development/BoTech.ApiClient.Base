@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+             xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels"
+             x:Class="BoTech.ApiClient.Base.Editor.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Grid>
+        <StackPanel>
+            <ContentControl Content="{Binding MenuViewContent}"/>
+            <StackPanel Orientation="Horizontal">
+                <ContentControl Margin="8,0,0,0"
+                                Content="{Binding ControllerNavPanelView}"/>
+                <ContentControl Margin="5,0,0,0"
+                                Content="{Binding MainTabPanelView}"/>
+            </StackPanel>
+        </StackPanel>
+        <shadUi:DialogHost Manager="{Binding DialogManagerProperty}" />
+        <shadUi:ToastHost Manager="{Binding ToastManagerProperty}" />
+    </Grid>
+</UserControl>

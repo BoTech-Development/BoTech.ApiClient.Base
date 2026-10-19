@@ -5,6 +5,7 @@ using ShadUI;
 using Splat;
 using System.Runtime.CompilerServices;
 using BoTech.ApiClient.Base.Editor.Controllers;
+using BoTech.ApiClient.Base.Editor.Services.Url;
 using BoTech.ApiClient.Base.Editor.Views.Editor;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels;
@@ -15,6 +16,10 @@ public class MainViewModel : ViewModelBase
     /// Make it accessible from the view.
     /// </summary>
     public DialogManager DialogManagerProperty => this.DialogManager;
+    /// <summary>
+    /// Make it accessible from the view.
+    /// </summary>
+    public ToastManager ToastManagerProperty => this.ToastManager;
 
     public MenuView MenuViewContent { get; set; }
     /// <summary>

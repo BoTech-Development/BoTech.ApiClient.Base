@@ -3,10 +3,8 @@ using BoTech.HttpClientHelper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
+using System.Globalization;
 using System.IO;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -44,8 +42,8 @@ namespace BoTech.ApiClient.Base.Editor.Services
             CurrentVersion = new UpdateInfo()
             {
                 IsLatest = false,
-                VersionString = "v1.0.9.Alpha",
-                ReleaseDateTime = DateTime.Parse("23:00:00 14.10.2026"),
+                VersionString = "v1.0.10.Alpha",
+                ReleaseDateTime = DateTime.ParseExact("13:00:00 19.10.2026", "HH:mm:ss dd.MM.yyyy", CultureInfo.InvariantCulture),
                 InformationString = "This is the current Version you installed. For Release details see the github page: https://github.com/BoTech-Development/BoTech.ApiClient.Base"
             };
         }

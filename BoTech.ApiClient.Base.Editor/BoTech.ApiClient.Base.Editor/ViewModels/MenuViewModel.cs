@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using BoTech.ApiClient.Base.Editor.Controllers;
+using BoTech.ApiClient.Base.Editor.Services.Url;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels
 {
@@ -66,7 +67,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             };
             CheckForUpdatesCommand = ReactiveCommand.Create(() =>
             { 
-                    ApplicationUpdateService.GetInstance().CheckForUpdates();
+                ApplicationUpdateService.GetInstance().CheckForUpdates();
             });
             ShowGithubPageCommand = ReactiveCommand.Create(OpenGitHubPage);
             ExecuteUpdateCommand = ReactiveCommand.Create(ExecuteUpdate);
@@ -118,11 +119,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         public void OpenGitHubPage()
         {
             string url = $"https://aka.botech.dev/bot.acb.editor?from=application&version={ApplicationUpdateService.GetInstance().CurrentVersion.VersionString}";
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            UrlLauncher.OpenAsync(new Uri(url));
         }
         /// <summary>
         /// Executes the update but first asks the user if he wants to update.
@@ -132,17 +129,52 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
             ApplicationUpdateService.UpdateInfo currentVersion = ApplicationUpdateService.GetInstance().CurrentVersion;
             ApplicationUpdateService.UpdateInfo latestVersion = ApplicationUpdateService.GetInstance().GetNewVersionInfo();
 
-            DialogManager.CreateDialog("Do you want to update now?", 
-                    "Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime + ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime + ") \n Info about the latest Version: \n" + latestVersion.InformationString)
-                .WithPrimaryButton("Update Now!", () => ApplicationUpdateService.GetInstance().ExecuteUpdateCommand())
-                .WithCancelButton("Remind me later")
-                .Show();
+            if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+            {
+                DialogManager.CreateDialog("Do you want to update now?",
+                        "Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime +
+                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
+                    .WithPrimaryButton("Update Now!",
+                        () => ApplicationUpdateService.GetInstance().ExecuteUpdateCommand())
+                    .WithCancelButton("Remind me later")
+                    .Show();
+            }
+
+            if (OperatingSystem.IsIOS() || OperatingSystem.IsAndroid())
+            {
+                DialogManager.CreateDialog("Do you want to update now?",
+                        "Please use the app store to update the app! \n Your Version: " + currentVersion.VersionString +
+                        " (" + currentVersion.ReleaseDateTime +
+                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
+                    .WithCancelButton("Go to App Store to update!")
+                    .Show();
+            }
+
+            if (OperatingSystem.IsBrowser())
+            {
+                DialogManager.CreateDialog("Do you want to update now?",
+                        "Please inform the admin to update this app! \n Your Version: " + currentVersion.VersionString +
+                        " (" + currentVersion.ReleaseDateTime +
+                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
+                    .WithCancelButton("Inform admin to update.")
+                    .Show();
+            }
         }
         private void ShowAboutDialog()
         {
-            DialogManager.CreateDialog(new AboutDialogViewModel(DialogManager, ToastManager))
-                .Dismissible()
-                .Show();
+            try
+            {
+                DialogManager.CreateDialog(new AboutDialogViewModel(DialogManager, ToastManager))
+                    .Dismissible()
+                    .Show();
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+            }
         }
     }
 }

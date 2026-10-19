@@ -3,6 +3,8 @@
 using Avalonia.Platform;
 using System;
 using System.Runtime.InteropServices;
+using BoTech.ApiClient.Base.Editor.Services;
+using BoTech.ApiClient.Base.Editor.ViewModels;
 
 namespace BoTech.ApiClient.Base.Editor.Views;
 
@@ -15,6 +17,10 @@ public partial class MainWindow : ShadUI.Window
     public MainWindow()
     {
         InitializeComponent();
+        this.mainContent.Content = new MainView()
+        {
+            DataContext = ServiceGenerator.ServiceProvider.GetService(typeof(MainViewModel))
+        };
     }
     /// <summary>
     /// This method applies the rounded corners theme to the main window, when the platform is win11

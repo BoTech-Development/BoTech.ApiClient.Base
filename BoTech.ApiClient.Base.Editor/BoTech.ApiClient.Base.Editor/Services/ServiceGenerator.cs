@@ -22,9 +22,9 @@ namespace BoTech.ApiClient.Base.Editor.Services
         public static void CreateServices()
         {
             Services = new ServiceCollection();
-            Services.AddKeyedSingleton(typeof(DialogManager), null);
-            Services.AddKeyedSingleton(typeof(ToastManager), null);
-            Services.AddTransient(typeof(MainViewModel));
+            Services.AddSingleton(typeof(DialogManager));
+            Services.AddSingleton(typeof(ToastManager));
+            Services.AddSingleton(typeof(MainViewModel));
             ServiceProvider = Services.BuildServiceProvider();
         }
 
