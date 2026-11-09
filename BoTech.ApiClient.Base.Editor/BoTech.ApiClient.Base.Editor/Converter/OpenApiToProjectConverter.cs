@@ -6,6 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Avalonia.Media.Transformation;
+using BoTech.ApiClient.Base.Editor.Models.Api.Request;
+using BoTech.ApiClient.Base.Editor.Models.Api.Request.Parameters;
+using BoTech.ApiClient.Base.Editor.Models.Api.Request.TypeDescriptors;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 
 
@@ -15,6 +19,10 @@ namespace BoTech.ApiClient.Base.Editor.Converter
     {
         public static void ConvertOpenApiToModels(Project projectContainingTheModels, OpenApiDocument openApiDocument)
         {
+            AddAllEndpointsToProject(projectContainingTheModels, openApiDocument);
+        }
+        private static void AddAllEndpointsToProject(Project projectContainingTheModels, OpenApiDocument openApiDocument)
+        {
             foreach (KeyValuePair<string, IOpenApiPathItem> path in openApiDocument.Paths)
             {
                 string route = path.Key;
@@ -23,11 +31,99 @@ namespace BoTech.ApiClient.Base.Editor.Converter
                 {
                     HttpMethod method = operation.Key;
                     OpenApiOperation actualOperation = operation.Value;
-
                     Controller controllerWhichContainsTheEndpoint = CreateOrGetControllerModelFromOperationOrProject(actualOperation, projectContainingTheModels);
                     Endpoint currentEndpoint = CreateEndpointModelForController(controllerWhichContainsTheEndpoint, method, route);
                     AddPossibleResponsesToEndpoint(currentEndpoint, actualOperation.Responses);
+                    AddRequestParamsToTheEndpoint(currentEndpoint, actualOperation);
                     controllerWhichContainsTheEndpoint.DefinedEndpointsInController.Add(currentEndpoint);
+                }
+            }
+        }
+
+        private static void AddRequestParamsToTheEndpoint(Endpoint endpoint, OpenApiOperation operation)
+        {
+            if(operation.Parameters is null)
+                return;
+            if (operation.RequestBody is not null && operation.RequestBody.Content is not null)
+            {
+                BodyParameter bodyParam = new BodyParameter()
+                {
+                    Description = operation.RequestBody.Description ?? "",
+                    IsDeprecated = false,
+                    IsRequired = operation.RequestBody.Required,
+                    TypeDescriptor =
+                        OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(
+                            operation.RequestBody.Content.First().Value.Schema)
+                };
+                endpoint.RequestDescription.Parameters.Add(bodyParam);
+            }
+            foreach (IOpenApiParameter parameter in operation.Parameters)
+            {
+                if(parameter.Schema is null)
+                    return;
+                //THIS CODE IS SHIT
+                switch (parameter.In)
+                {
+                    case ParameterLocation.Query:
+                        endpoint.RequestDescription.Parameters.Add(
+                            new QueryParameter()
+                            {
+                                Name = parameter.Name ?? "",
+                                Description = parameter.Description ?? "",
+                                IsDeprecated = parameter.Deprecated,
+                                IsRequired = parameter.Required,
+                                TypeDescriptor = OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(parameter.Schema)
+                            });
+                        break;
+                    case ParameterLocation.QueryString:
+                        endpoint.RequestDescription.Parameters.Add(
+                            new QueryParameter()
+                            {
+                                Name = parameter.Name ?? "",
+                                Description = parameter.Description ?? "",
+                                IsDeprecated = parameter.Deprecated,
+                                IsRequired = parameter.Required,
+                                TypeDescriptor = OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(parameter.Schema)
+                            });
+                        break;
+                    case ParameterLocation.Header:
+                        endpoint.RequestDescription.Parameters.Add(
+                            new HeaderParameter()
+                            {
+                                Name = parameter.Name ?? "",
+                                Description = parameter.Description ?? "",
+                                IsDeprecated = parameter.Deprecated,
+                                IsRequired = parameter.Required,
+                                TypeDescriptor = OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(parameter.Schema)
+                            });
+                        break;
+                    case ParameterLocation.Path:
+                        endpoint.RequestDescription.RouteParameters.Add(
+                            RouteElement.CreateRouteElementFromRoutParameter(
+                                new RouteParameter()
+                                {
+                                    Name = parameter.Name ?? "",
+                                    Description = parameter.Description ?? "",
+                                    IsDeprecated = parameter.Deprecated,
+                                    IsRequired = parameter.Required,
+                                    TypeDescriptor = OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(parameter.Schema)
+                                }
+                             ));
+                        break;
+                    case ParameterLocation.Cookie:
+                        endpoint.RequestDescription.Parameters.Add(
+                            new CookieParameter()
+                            {
+                                Name = parameter.Name ?? "",
+                                Description = parameter.Description ?? "",
+                                IsDeprecated = parameter.Deprecated,
+                                IsRequired = parameter.Required,
+                                TypeDescriptor = OpenApiSchemaToTypeDescriptorConverter.GenerateTypeDescriptorFromOpenApiSchema(parameter.Schema)
+                            });
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            $"The parameter Type is unknown and can't be converted: {parameter}");
                 }
             }
         }
@@ -61,10 +157,13 @@ namespace BoTech.ApiClient.Base.Editor.Converter
         }
         private static HttpStatusCode ConvertStatusCodeStringToEnum(string statusCode)
         {
-            int statusCodeAsInt = int.Parse(statusCode);
-            if (Enum.IsDefined(typeof(HttpStatusCode), statusCodeAsInt))
+            // Check is needed because in a default state the status code does not contain a real number.
+            if (int.TryParse(statusCode, out int statusCodeAsInt)) 
             {
-                return (HttpStatusCode)statusCodeAsInt;
+                if (Enum.IsDefined(typeof(HttpStatusCode), statusCodeAsInt))
+                {
+                    return (HttpStatusCode)statusCodeAsInt;
+                }
             }
             return default(HttpStatusCode);
         }

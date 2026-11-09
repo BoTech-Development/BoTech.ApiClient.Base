@@ -61,7 +61,7 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         /// This method will create the project from the given data
         /// </summary>
         /// <param name="newProjectInfo">The given user data boxed into the <see cref="CreateNewProjectData"/> dto.</param>
-        public void CreateNewAndOpenProject(CreateNewProjectData newProjectInfo)
+        public async Task CreateNewAndOpenProject(CreateNewProjectData newProjectInfo)
         {
             CurrentLoadedProject = new Project()
             {
@@ -69,7 +69,7 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
                 SharedModelsProjectFilePath = newProjectInfo.SharedModelProjectFile,
                 ApiClientProjectFilePath = newProjectInfo.ProjectLocation + newProjectInfo.ProjectName + "/" + newProjectInfo.ProjectName + ".csproj"
             };
-            LoadOpenApiDefinitionToCurrentProject(newProjectInfo.OpenApiDefinitionJsonFilePath);
+            await LoadOpenApiDefinitionToCurrentProject(newProjectInfo.OpenApiDefinitionJsonFilePath);
             CreateApiClientProjectForCurrentProject();
             PathToTheProjectFile = newProjectInfo.ProjectLocation + newProjectInfo.ProjectName + ".bacproj";
             StoreProject();

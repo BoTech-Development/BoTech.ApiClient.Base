@@ -61,5 +61,4 @@ public class TokenHandler
     {
         _currentToken = null;
     }
-    
 }

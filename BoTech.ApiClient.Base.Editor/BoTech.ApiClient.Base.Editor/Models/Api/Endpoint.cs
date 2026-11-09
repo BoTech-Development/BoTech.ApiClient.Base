@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using BoTech.ApiClient.Base.Editor.Models.Api.Request;
 
 namespace BoTech.ApiClient.Base.Editor.Models.Api
 {
@@ -23,5 +24,11 @@ namespace BoTech.ApiClient.Base.Editor.Models.Api
         /// All messages that the server normally returns.
         /// </summary>
         public List<EndpointResult> PossibleResults { get; init; } = new List<EndpointResult>();
+        /// <summary>
+        /// This property basically describes the signature of the endpoint through each <see cref="EndpointRequest"/>.
+        /// In addition, the object <see cref="EndpointRequest"/> stores, on which way the data is sent to the endpoint.
+        /// Empty when there is no parameter needed to send else not empty.
+        /// </summary>
+        public EndpointRequest RequestDescription { get; set; } = new();
     }
 }
