@@ -58,10 +58,13 @@
                             <icons:MaterialIcon Grid.Column="0"
                                                 Kind="Function"
                                                 IconSize="24"/>
-                            <TextBlock Grid.Column="1" 
-                                       Text="{Binding EndpointName}" 
-                                       VerticalAlignment="Center"
-                                       FontSize="14"/>
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="{Binding EndpointName}" 
+                                           FontSize="14"/>
+                                <TextBlock Text="{Binding Route}"
+                                           FontSize="12"/>
+                            </StackPanel>
                             <Border Grid.Column="2" 
                                     BorderBrush="{Binding HttpMethodIndicatorBorderColor}"
                                     BorderThickness="2"

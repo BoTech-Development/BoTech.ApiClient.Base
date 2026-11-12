@@ -1,7 +1,14 @@
 ﻿using BoTech.ApiClient.Base.Editor.Models.Api.Request.TypeDescriptors;
+using System.Text.Json.Serialization;
 
 namespace BoTech.ApiClient.Base.Editor.Models.Api.Request.Parameters;
 
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+[JsonDerivedType(typeof(BodyParameter), nameof(BodyParameter))]
+[JsonDerivedType(typeof(CookieParameter), nameof(CookieParameter))]
+[JsonDerivedType(typeof(HeaderParameter), nameof(HeaderParameter))]
+[JsonDerivedType(typeof(QueryParameter), nameof(QueryParameter))]
+[JsonDerivedType(typeof(RouteParameter), nameof(RouteParameter))]
 public interface IParameterBase
 {
     /// <summary>

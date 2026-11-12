@@ -8,11 +8,9 @@ public class RouteElement
 {
     private RouteElement? _next = null;
     
-    public RouteParameter? Parameter { get; set; } = null;
-    public string ConstText { get; set; } = "";
+    public RouteParameter? Parameter { get; private set; } = null;
 
-    public static RouteElement CreateRouteElementFromRoutParameter(RouteParameter param) =>
-        new RouteElement() { Parameter = param };
+    public static RouteElement CreateRouteElementFromRoutParameter(RouteParameter param) => new RouteElement() { Parameter = param };
 
     /// <summary>
     /// Adds a new element to the end of the route
@@ -20,7 +18,12 @@ public class RouteElement
     /// <param name="next">the new element to add.</param>
     public void Add(RouteElement next)
     {
-        if(_next is not null)
+        if (Parameter is null)
+        {
+            Parameter = next.Parameter;
+            return;
+        }
+        if (_next is not null)
             _next.Add(next);
         else
             _next = next;
@@ -51,10 +54,12 @@ public class RouteElement
 
     public bool IsEmpty()
     {
-        return Parameter is null && ConstText == "";
+        return Parameter is null;
     }
     public override string ToString()
     {
-        return (Parameter is null ? ConstText : Parameter.ToString()) + (_next is null ? "" : _next.ToString());
+        if (Parameter is null)
+            return "EMPTY";
+        return Parameter + (_next is null ? "" : _next.ToString());
     }
 }

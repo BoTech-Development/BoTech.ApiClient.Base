@@ -80,7 +80,10 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         /// </summary>
         public void StoreProject()
         {
-            string serializedProject = JsonSerializer.Serialize(CurrentLoadedProject);
+            string serializedProject = JsonSerializer.Serialize(CurrentLoadedProject, new JsonSerializerOptions()
+            {
+                WriteIndented = true // readable json
+            });
             File.WriteAllText(PathToTheProjectFile, serializedProject);
         }
 

@@ -167,28 +167,37 @@ namespace BoTech.ApiClient.Base.Editor.Converter
             }
             return default(HttpStatusCode);
         }
-        private static Endpoint CreateEndpointModelForController(Models.Api.Controller controller, HttpMethod method, string routeToTheEndpoint)
+        private static Endpoint CreateEndpointModelForController(Controller controller, HttpMethod method, string routeToTheEndpoint)
         {
-            string methodName = "";
-            int indexOfControllerName = routeToTheEndpoint.IndexOf(controller.ControllerName);
-            if (indexOfControllerName > 0)
-                methodName = routeToTheEndpoint.Substring(indexOfControllerName + controller.ControllerName.Length);
-            else
-                methodName = routeToTheEndpoint;
+            List<string> routeElements = routeToTheEndpoint.Split('/').ToList();
+            // Remove split error item.
+            routeElements.Remove("");
+            // remove the controller name because the Controller already contains the info.
+            routeElements.Remove(controller.ControllerName);
+            // filter all rout params like /{userId}/
+            List<string> routeParams = routeElements.FindAll(routeItem => routeItem.Contains("{"));
+
+            // delete all filtered items first.
+            routeElements.RemoveAll(routeParams.Contains);
+            // if the endpoint has a name it will be the last item in the Collection.
+            string methodName = "NO_NAME";
+            if (routeElements.Count == 1)
+                methodName = routeElements[0];
             return new Endpoint()
             {
-                MethodName = methodName.Replace("/",""),
+                MethodName = methodName,
                 Route = routeToTheEndpoint,
-                HttpMethod = method
+                HttpMethod = method,
+                RouteParameters = routeElements
             };
         }
-        private static Models.Api.Controller CreateOrGetControllerModelFromOperationOrProject(OpenApiOperation operation, Project project)
+        private static Controller CreateOrGetControllerModelFromOperationOrProject(OpenApiOperation operation, Project project)
         {
             string? controllerName = operation.Tags.FirstOrDefault()?.Name;
             if (controllerName is null)
                 throw new ArgumentException(
                     "Can not evaluate the controller name by using the OpenApi definition of your api.");
-            Models.Api.Controller? existingController = project.CustomizedControllers.Find(cont => cont.ControllerName == controllerName);
+            Controller? existingController = project.CustomizedControllers.Find(cont => cont.ControllerName == controllerName);
             if (existingController == null)
             {
                 existingController = new Controller()

@@ -11,7 +11,7 @@ namespace BoTech.ApiClient.Base.Editor.Models
         /// <summary>
         /// Each controller which is covered by the api client.
         /// </summary>
-        public List<Api.Controller> CustomizedControllers { get; set; } = new List<Api.Controller>();
+        public List<Controller> CustomizedControllers { get; set; } = new List<Controller>();
         /// <summary>
         /// The path to .csproj file which contains the api client for the api.
         /// </summary>
