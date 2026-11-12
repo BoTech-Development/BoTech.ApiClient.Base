@@ -1,6 +1,5 @@
 ﻿using System;
 using ReactiveUI;
-using ShadUI;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using Avalonia.Media;
@@ -76,7 +75,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav
             }
             throw new InvalidOperationException("Can not find the selected Endpoint!");
         }
-        public ControllerNavPanelViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
+        public ControllerNavPanelViewModel()
         {
             InitView(ProjectController.GetInstance().CurrentLoadedProject);
         }
@@ -113,17 +112,17 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav
             switch (method.Method)
             {
                 case "GET":
-                    return Brushes.Green;
+                    return Brush.Parse("#FFA4E0A7"); // Green
                 case "POST":
-                    return Brushes.Blue;
+                    return Brush.Parse("#FF98CDFD");
                 case "PUT":
-                    return Brush.Parse("#FCA130");
+                    return Brush.Parse("#FFFED998");
                 case "PATCH":
-                    return Brushes.Fuchsia;
+                    return Brush.Parse("#FFDD9BE0");
                 case "DELETE":
-                    return Brushes.Red;
+                    return Brush.Parse("#FFFDB7A5");
                 default:
-                    return Brushes.Gray;
+                    return Brush.Parse("#FFC6CACD");
             }
         }
         private IBrush GetBackgroundColorOfHttpMethodIndicator(HttpMethod method)
@@ -131,17 +130,17 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.ControllerNav
             switch (method.Method)
             {
                 case "GET":
-                    return Brushes.LightGreen;
+                    return Brush.Parse("#FFD0F0D1");
                 case "POST":
-                    return Brushes.LightBlue;
+                    return Brush.Parse("#FFCBE7FE");
                 case "PUT":
-                    return Brush.Parse("#FBF1E6");
+                    return Brush.Parse("#FFFEEECC");
                 case "PATCH":
-                    return Brushes.LightPink;
+                    return Brush.Parse("#FFEFCAF0");
                 case "DELETE":
-                    return Brushes.LightSalmon;
+                    return Brush.Parse("#FFFEDDD2");
                 default:
-                    return Brushes.LightGray;
+                    return Brush.Parse("#FFE6E8EA");
             }
         }
     }

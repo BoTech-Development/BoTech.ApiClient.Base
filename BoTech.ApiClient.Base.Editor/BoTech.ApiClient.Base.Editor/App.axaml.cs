@@ -17,9 +17,6 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        ServiceGenerator.CreateServices();
-        ServiceGenerator.InitializeDialogManager();
-
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
@@ -32,7 +29,7 @@ public partial class App : Application
                 {
                     MainView mainView = new MainView
                     {
-                        DataContext = ServiceGenerator.ServiceProvider.GetService(typeof(MainViewModel))
+                        DataContext = new MainViewModel()
                     };
                     TopLevelProvider.CreateInstance(mainView); // Init file dialog helper
                     return mainView;
@@ -42,7 +39,7 @@ public partial class App : Application
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = ServiceGenerator.ServiceProvider.GetService(typeof(MainViewModel))
+                DataContext = new MainViewModel()
             };
             TopLevelProvider.CreateInstance(singleViewPlatform.MainView); // Init file dialog helper
         }

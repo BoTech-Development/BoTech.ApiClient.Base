@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace BoTech.ApiClient.Base.Editor.Models.Api.Request.TypeDescriptors
 {
@@ -35,6 +36,7 @@ namespace BoTech.ApiClient.Base.Editor.Models.Api.Request.TypeDescriptors
                                              ArrayOfObjectsType is not null;
         public bool IsSubArray() => SubArrayTypeDescriptor != null;
 
+        [JsonConstructor]
         private UnifiedTypeDescriptor() { }
 
         public static UnifiedTypeDescriptor CreatePrimitiveType(PrimitiveType type)

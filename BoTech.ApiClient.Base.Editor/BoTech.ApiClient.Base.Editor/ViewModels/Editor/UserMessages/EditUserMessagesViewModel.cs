@@ -4,7 +4,6 @@ using BoTech.ApiClient.Base.Editor.Models.Api;
 using BoTech.ApiClient.LibreTranslate;
 using ReactiveUI;
 using ReactiveUI.Primitives;
-using ShadUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -86,8 +85,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.UserMessages
         /// </summary>
         private UserMessagesForEndpoint _userMessagesForSelectedEndpoint;
 
-        public EditUserMessagesViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager,
-            toastManager)
+        public EditUserMessagesViewModel()
         {
             EditorViewController.Instance.OnUserSelectedEndpointInControllerNav += OnUpdateUserEndpointSelection;
             TranslateCurrentUserMessageCommand = ReactiveCommand.Create(TranslateCurrentUserMessageToAllLanguages);

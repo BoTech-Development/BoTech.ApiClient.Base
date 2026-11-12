@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using BoTech.ApiClient.Base.Editor.Views;
 using ReactiveUI;
-using ShadUI;
 using Splat;
 using System.Runtime.CompilerServices;
 using BoTech.ApiClient.Base.Editor.Controllers;
@@ -12,15 +11,6 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    /// <summary>
-    /// Make it accessible from the view.
-    /// </summary>
-    public DialogManager DialogManagerProperty => this.DialogManager;
-    /// <summary>
-    /// Make it accessible from the view.
-    /// </summary>
-    public ToastManager ToastManagerProperty => this.ToastManager;
-
     public MenuView MenuViewContent { get; set; }
     /// <summary>
     /// nav pane for the controllers defined in the api
@@ -38,12 +28,12 @@ public class MainViewModel : ViewModelBase
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public MainViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
+    public MainViewModel()
     {
         EditorViewController.CreateInstance(this); // make this instance globally available.
         MenuViewContent = new MenuView()
         {
-            DataContext = new MenuViewModel(dialogManager, toastManager)
+            DataContext = new MenuViewModel()
         };
         ControllerNavPanelView = new TextBlock()
         {

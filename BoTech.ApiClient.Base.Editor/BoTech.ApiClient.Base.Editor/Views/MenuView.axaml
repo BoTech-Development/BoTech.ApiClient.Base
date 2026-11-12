@@ -1,19 +1,19 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:BoTech.ApiClient.Base.Editor.ViewModels"
-             xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:ursa="https://irihi.tech/ursa"
              x:Class="BoTech.ApiClient.Base.Editor.Views.MenuView"
              x:DataType="vm:MenuViewModel">
     <Grid ColumnDefinitions="*, *"
           Margin="8,8,8,5">
         <Border Grid.Column="0" 
-                CornerRadius="{DynamicResource LgCornerRadius}"
+                CornerRadius="14"
                 HorizontalAlignment="Left"
                 Padding="4"
                 BorderThickness="2"
                 BorderBrush="#FFCECECE">
-            <Menu >
+            <Menu>
                 <MenuItem Header="File">
                     <MenuItem Header="New Project"
                               Command="{Binding OpenCreateNewProjectDialogCommand}"/>
@@ -36,27 +36,19 @@
                 </MenuItem>
             </Menu>
         </Border>
-        <Grid Grid.Column="1"
-              IsVisible="{Binding IsUpdateAvailable}">
-    
-            <Button Grid.Column="1"
+        <ursa:Badge Grid.Column="1"
+                    Header="{Binding LatestVersion}"
                     HorizontalAlignment="Right"
-                    Classes="Outline"
-                    Command="{Binding ExecuteUpdateCommand}">
-                <shadUi:ButtonAssist.Icon>
-                    <avalonia:MaterialIcon Kind="DownloadBoxOutline"/>
-                </shadUi:ButtonAssist.Icon>
-                Update available!
+                    IsVisible="{Binding IsUpdateAvailable}"
+                    Margin="0,0,40,0">
+            <Button Command="{Binding ExecuteUpdateCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="DownloadBoxOutline"
+                                        IconSize="24"/>
+                    <TextBlock Text="Update available!"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
             </Button>
-
-            <shadUi:Badge
-                Content="{Binding LatestVersion}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Margin="0,-6,-6,-10"
-                Classes="Destructive" />
-
-        </Grid>
-
+        </ursa:Badge>
     </Grid>
 </UserControl>

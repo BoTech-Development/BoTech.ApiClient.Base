@@ -1,7 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using ReactiveUI;
 using ReactiveUI.Primitives;
-using ShadUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,15 @@ using System.Text;
 using BoTech.ApiClient.Base.Editor.Controllers;
 using BoTech.ApiClient.Base.Editor.Models;
 using BoTech.ApiClient.Base.Editor.Services;
+using Irihi.Avalonia.Shared.Contracts;
+using Ursa.Controls;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
 {
-    internal class CreateNewProjectDialogViewModel : ViewModelBase
+    internal class CreateNewProjectDialogViewModel : ViewModelBase, IDialogContext
     {
+
+        public event EventHandler<object?>? RequestClose;
         public string ProjectName
         {
             get => field;
@@ -43,7 +46,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
         public ReactiveCommand<RxVoid, RxVoid> OpenSharedModelsProjectFileSelectorCommand { get; set; }
         public ReactiveCommand<RxVoid, RxVoid> CreateProjectCommand { get; set; }
 
-        public CreateNewProjectDialogViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
+        public CreateNewProjectDialogViewModel()
         {
             OpenProjectLocationFileSelectorCommand =
                 ReactiveCommand.Create(() =>
@@ -74,7 +77,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
         /// <param name="title">The title of the view.</param>
         /// <returns>the selected folder or null when no folder selected.</returns>
         private IStorageFolder? OpenFolderSelector(string title)
-        {
+        { 
             return StorageProviderService.GetStorageProvider().OpenFolderPickerAsync(new FolderPickerOpenOptions()
             {
                 Title = title,
@@ -97,7 +100,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
 
         private void CreateProject()
         {
-            DialogManager.Close(this);
+            Close();
             ProjectController.GetInstance().OnProjectLoaded += (sender, eventArgs) =>
             {
                 EditorViewController.Instance!.InitializeViewsForCurrentProject(); // Nullable is necessary to check because it is set MainViewModel.cs .
@@ -110,5 +113,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Dialogs
                 SharedModelProjectFile = this.SharedModelProjectFile
             });
         }
+
+        public void Close() => RequestClose?.Invoke(this, EventArgs.Empty);
     }
 }

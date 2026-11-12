@@ -1,9 +1,6 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Primitives;
-using ShadUI;
-using Splat;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using Avalonia.Controls;
@@ -20,14 +17,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.Main
 
         private static MainTabPanelViewModel? _currentInstance;
 
-        public MainTabPanelViewModel() : base(null, null)
-        {
-            Tabs.Add(new TabPage("User Messages", new TextBlock()
-            {
-                Text = "Bello content"
-            }));
-        }
-        public MainTabPanelViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
+        public MainTabPanelViewModel()
         {
             CloseSpecificTabCommand = ReactiveCommand.Create<TabPage>((tabToClose) =>
             {
@@ -53,7 +43,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels.Editor.Main
                     "Please create an instance of the MainTabPanelViewModel class first, before adding tabs.");
             _currentInstance.Tabs.Add(new TabPage("User Messages", new EditUserMessagesView()
             {
-                DataContext = new EditUserMessagesViewModel(_currentInstance.DialogManager, _currentInstance.ToastManager)
+                DataContext = new EditUserMessagesViewModel()
             }));
         }
 

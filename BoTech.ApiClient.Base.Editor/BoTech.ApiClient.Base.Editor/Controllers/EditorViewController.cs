@@ -20,7 +20,7 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         /// <summary>
         /// Invoked by the <see cref="ControllerNavPanelViewModel"/> when the user selects a specific Controller in the list box
         /// </summary>
-        public EventHandler<Models.Api.Controller> OnUserSelectedControllerInControllerNav;
+        public EventHandler<Controller> OnUserSelectedControllerInControllerNav;
         /// <summary>
         /// Invoked by the <see cref="ControllerNavPanelViewModel"/> when the user selects a specific Endpoint in the list box.
         /// This event also provides the controller where the endpoint is defined.
@@ -29,7 +29,7 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         /// <summary>
         /// Necessary to the control the view from this class.
         /// </summary>
-        private MainViewModel _mainViewModel;
+        private readonly MainViewModel _mainViewModel;
         /// <summary>
         /// singleton
         /// </summary>
@@ -51,12 +51,11 @@ namespace BoTech.ApiClient.Base.Editor.Controllers
         {
             _mainViewModel.ControllerNavPanelView = new ControllerNavPanelView()
             {
-                DataContext = new ControllerNavPanelViewModel(_mainViewModel.DialogManager,
-                    _mainViewModel.ToastManager)
+                DataContext = new ControllerNavPanelViewModel()
             };
             _mainViewModel.MainTabPanelView = new MainTabPanelView()
             {
-                DataContext = new MainTabPanelViewModel(_mainViewModel.DialogManager, _mainViewModel.ToastManager)
+                DataContext = new MainTabPanelViewModel()
             };
             MainTabPanelViewModel.ShowAllViews();
         }

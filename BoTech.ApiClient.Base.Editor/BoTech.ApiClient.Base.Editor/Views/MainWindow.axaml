@@ -1,13 +1,21 @@
-﻿<shadUi:Window xmlns="https://github.com/avaloniaui"
+﻿<ursa:UrsaWindow xmlns="https://github.com/avaloniaui"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                xmlns:vm="using:BoTech.ApiClient.Base.Editor.ViewModels"
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                xmlns:views="clr-namespace:BoTech.ApiClient.Base.Editor.Views"
-               xmlns:shadUi="clr-namespace:ShadUI;assembly=ShadUI"
+               xmlns:ursa="https://irihi.tech/ursa"
                x:Class="BoTech.ApiClient.Base.Editor.Views.MainWindow"
                x:DataType="vm:MainViewModel"
                Icon="/Assets/avalonia-logo.ico"
                Title="BoTech.ApiClient.Base.Editor">
-    <ContentControl x:Name="mainContent"/>
-</shadUi:Window>
+    <StackPanel>
+        <Border Background="LightGray">
+            <TextBlock Text="BoTech.ApiClient.Base.Editor" 
+                       Height="16"
+                       Margin="8,8,0,8"
+                       FontWeight="Bold"/>
+        </Border>
+        <ContentControl x:Name="mainContent"/>
+    </StackPanel>
+</ursa:UrsaWindow>

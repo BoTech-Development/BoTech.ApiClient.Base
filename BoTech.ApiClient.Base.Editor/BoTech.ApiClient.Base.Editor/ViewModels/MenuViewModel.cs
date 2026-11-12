@@ -1,15 +1,17 @@
 ﻿using Avalonia.Platform.Storage;
+using BoTech.ApiClient.Base.Editor.Controllers;
 using BoTech.ApiClient.Base.Editor.Services;
+using BoTech.ApiClient.Base.Editor.Services.Url;
 using BoTech.ApiClient.Base.Editor.ViewModels.Dialogs;
+using BoTech.ApiClient.Base.Editor.Views.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Primitives;
-using ShadUI;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using BoTech.ApiClient.Base.Editor.Controllers;
-using BoTech.ApiClient.Base.Editor.Services.Url;
+using System.Threading.Tasks;
+using Ursa.Controls;
 
 namespace BoTech.ApiClient.Base.Editor.ViewModels
 {
@@ -26,7 +28,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// <summary>
         /// Updates this application to a new version.
         /// </summary>
-        public ReactiveCommand<RxVoid, RxVoid> ExecuteUpdateCommand { get; set; }
+        public ReactiveCommand<RxVoid, Task> ExecuteUpdateCommand { get; set; }
         /// <summary>
         /// Shows the About dialog 
         /// </summary>
@@ -50,7 +52,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
 
         public ReactiveCommand<RxVoid, RxVoid> ExportApiClientBaseConfigJson { get; set; }
 
-        public MenuViewModel(DialogManager dialogManager, ToastManager toastManager) : base(dialogManager, toastManager)
+        public MenuViewModel()
         {
             ApplicationUpdateService.GetInstance().OnNewUpdateFound +=
                 (object? sender, ApplicationUpdateService.UpdateInfo updateInfo) =>
@@ -60,10 +62,7 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
                 };
             ApplicationUpdateService.GetInstance().OnUpdateError += (object? sender, Exception error) =>
             {
-                DialogManager.CreateDialog("Error by installing or fetching updates!", "Here is the error: " + error.Message)
-                    .WithCancelButton("Close")
-                    .Dismissible()
-                    .Show();
+                MessageBox.ShowAsync("Here is the error: " + error.Message, "Error by installing or fetching updates!", MessageBoxIcon.Error);
             };
             CheckForUpdatesCommand = ReactiveCommand.Create(() =>
             { 
@@ -108,10 +107,13 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// </summary>
         private void OpenCreateNewProjectDialog()
         {
-            CreateNewProjectDialogViewModel vm = new CreateNewProjectDialogViewModel(DialogManager, ToastManager);
-            DialogManager.CreateDialog(vm)
-                .Dismissible()
-                .Show();
+            CreateNewProjectDialogViewModel vm = new CreateNewProjectDialogViewModel();
+            OverlayDialog.ShowStandardAsync<CreateNewProjectDialogView, CreateNewProjectDialogViewModel>(vm,
+                options: new OverlayDialogOptions
+                {
+                    CanLightDismiss = true,   // replaces .Dismissible()
+                    Buttons = DialogButton.None
+                });
         }
         /// <summary>
         /// This method shows the info page
@@ -124,57 +126,48 @@ namespace BoTech.ApiClient.Base.Editor.ViewModels
         /// <summary>
         /// Executes the update but first asks the user if he wants to update.
         /// </summary>
-        private void ExecuteUpdate()
+        private async Task ExecuteUpdate()
         {
             ApplicationUpdateService.UpdateInfo currentVersion = ApplicationUpdateService.GetInstance().CurrentVersion;
             ApplicationUpdateService.UpdateInfo latestVersion = ApplicationUpdateService.GetInstance().GetNewVersionInfo();
 
             if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
             {
-                DialogManager.CreateDialog("Do you want to update now?",
-                        "Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime +
-                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
-                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
-                    .WithPrimaryButton("Update Now!",
-                        () => ApplicationUpdateService.GetInstance().ExecuteUpdateCommand())
-                    .WithCancelButton("Remind me later")
-                    .Show();
+                MessageBoxResult result = await MessageBox.ShowAsync("Your Version: " + currentVersion.VersionString + " (" + currentVersion.ReleaseDateTime +
+                                                               ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                                                               ") \n Info about the latest Version: \n" + latestVersion.InformationString,
+                                                               "Do you want to update now?", MessageBoxIcon.Question, MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                    ApplicationUpdateService.GetInstance().ExecuteUpdateCommand();
             }
 
             if (OperatingSystem.IsIOS() || OperatingSystem.IsAndroid())
             {
-                DialogManager.CreateDialog("Do you want to update now?",
-                        "Please use the app store to update the app! \n Your Version: " + currentVersion.VersionString +
-                        " (" + currentVersion.ReleaseDateTime +
-                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
-                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
-                    .WithCancelButton("Go to App Store to update!")
-                    .Show();
+                MessageBox.ShowAsync("Please use the APP STORE to update the app!!! \n Your Version: " + currentVersion.VersionString +
+                                     " (" + currentVersion.ReleaseDateTime +
+                                     ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                                     ") \n Info about the latest Version: \n" + latestVersion.InformationString,
+                               "Do you want to update now?", MessageBoxIcon.Question, MessageBoxButton.OK);
             }
 
             if (OperatingSystem.IsBrowser())
             {
-                DialogManager.CreateDialog("Do you want to update now?",
-                        "Please inform the admin to update this app! \n Your Version: " + currentVersion.VersionString +
-                        " (" + currentVersion.ReleaseDateTime +
-                        ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
-                        ") \n Info about the latest Version: \n" + latestVersion.InformationString)
-                    .WithCancelButton("Inform admin to update.")
-                    .Show();
+                MessageBox.ShowAsync("Please inform the ADMIN to update this app!!! \n Your Version: " + currentVersion.VersionString +
+                                     " (" + currentVersion.ReleaseDateTime +
+                                     ") \n Latest Version: " + latestVersion.VersionString + " (" + latestVersion.ReleaseDateTime +
+                                     ") \n Info about the latest Version: \n" + latestVersion.InformationString,
+                               "Do you want to update now?", MessageBoxIcon.Question, MessageBoxButton.OK);
             }
         }
+
         private void ShowAboutDialog()
         {
-            try
-            {
-                DialogManager.CreateDialog(new AboutDialogViewModel(DialogManager, ToastManager))
-                    .Dismissible()
-                    .Show();
-            }
-            catch (Exception e)
-            {
-                string msg = e.Message;
-            }
+            OverlayDialog.ShowStandardAsync<AboutDialogView, AboutDialogViewModel>(new AboutDialogViewModel(),
+                options: new OverlayDialogOptions
+                {
+                    CanLightDismiss = true, // replaces .Dismissible()
+                    Buttons = DialogButton.None
+                });
         }
     }
 }
